@@ -15,9 +15,24 @@
         }
 
         header {
-            background-color: #333;
+            background: linear-gradient(to right, #1e17b9, #f6e33d, #0cc161); /* 深色彩色渐变背景 */
             color: #fff;
             padding: 1em 0;
+            background: linear-gradient(to right, #1e17b9, #f6e33d, #0cc161);
+            background-size: 200% 200%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         ul {
@@ -65,14 +80,15 @@
 </header>
 
 <ul>
+    <br>
     <li><a class="btn" href="https://github.com/CangWeiohh"><span class="symbol">🔗</span>GitHub CangWeiohh</a></li>
     <li><a class="btn" href="https://t.me/macOS_share"><span class="symbol">🔗</span>macOS分享频道</a></li>
     <li><a class="btn" href="https://t.me/macOS_share_group"><span class="symbol">🔗</span>macOS交流频道</a></li>
     <li><a class="btn" href="https://www.123pan.com/s/Zi5RVv-pcNud"><span class="symbol">🔗</span>macOS软件分享 123云盘持续更新中</a></li>
     <br>
-	<li><div class="separator"></div></li>
-	<br>
-	<li><a class="btn" href="https://cangweiohh.github.io/neta_mall/product_list.txt"><span class="symbol">🔗</span>哪吒商城 商品列表</a></li>
+    <li><div class="separator"></div></li>
+    <br>
+    <li><a class="btn" href="https://cangweiohh.github.io/neta_mall/product_list.txt"><span class="symbol">🔗</span>哪吒商城 商品列表</a></li>
 </ul>
 
 </body>

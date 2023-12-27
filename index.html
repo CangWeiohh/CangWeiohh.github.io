@@ -33,6 +33,30 @@
       transition: transform 2s ease-in-out, font-size 2s ease-in-out, top 2s ease-in-out;
     }
 
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #333333;
+        color: #ffffff;
+      }
+
+      h1 {
+        color: #ffffff;
+        text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.6);
+      }
+
+      .scroll-indicator {
+        color: #d3d3d3;
+      }
+
+      .links a {
+        color: #999999;
+      }
+
+      .links a:hover {
+        color: #ffffff;
+      }
+    }
+
     @media only screen and (max-width: 600px) {
       h1 {
         position: absolute;
@@ -48,7 +72,6 @@
       position: absolute;
       bottom: 40px;
       font-size: 1em;
-      color: #d3d3d3;
       opacity: 1;
       animation: fadeOut 4s ease-in-out infinite;
       text-align: center;

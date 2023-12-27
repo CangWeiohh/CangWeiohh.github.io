@@ -4,123 +4,126 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CangWei</title>
-  <style>
+<style>
+  /* 通用样式 */
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    opacity: 0.8;
+    background-image: radial-gradient(circle at center center, #fcfcfc, #ffffff), repeating-radial-gradient(circle at center center, #fcfcfc, #fcfcfc, 30px, transparent 60px, transparent 30px);
+    background-blend-mode: multiply;
+    position: relative;
+  }
+
+  h1 {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-family: 'Seaside Resort NF', cursive;
+    font-size: 7em;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+    letter-spacing: 10px;
+    transition: transform 2s ease-in-out, font-size 2s ease-in-out, top 2s ease-in-out;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    font-size: 1em;
+    opacity: 1;
+    animation: fadeOut 4s ease-in-out infinite;
+    text-align: center;
+  }
+
+  @keyframes fadeOut {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 95px;
+    opacity: 0; /* 初始隐藏 */
+    pointer-events: none; /* 初始禁用鼠标事件 */
+    transition: opacity 2s ease-in-out;
+  }
+
+  .links.visible {
+    opacity: 1 !important;
+    pointer-events: auto; /* 启用鼠标事件 */
+  }
+
+  .links a {
+    color: #999999;
+    text-decoration: none;
+    font-family: 'PingFangSC-Regular', sans-serif;
+    font-size: 1em;
+    letter-spacing: 0;
+    text-align: center;
+    margin-top: 12px;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .links.visible a {
+    opacity: 1;
+  }
+
+  .links a:hover {
+    color: #333333;
+  }
+
+  /* 在深色模式下修改链接颜色 */
+  @media (prefers-color-scheme: dark) {
     body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: #ffffff;
-      opacity: 0.8;
-      background-image: radial-gradient(circle at center center, #fcfcfc, #ffffff), repeating-radial-gradient(circle at center center, #fcfcfc, #fcfcfc, 30px, transparent 60px, transparent 30px);
-      background-blend-mode: multiply;
-      position: relative;
+      background-color: #333333;
+      color: #ffffff;
     }
 
     h1 {
-      position: absolute;
-      top: 40%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       color: #ffffff;
-      font-family: 'Seaside Resort NF', cursive;
-      font-size: 7em;
-      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
-      letter-spacing: 10px;
-      transition: transform 2s ease-in-out, font-size 2s ease-in-out, top 2s ease-in-out;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body {
-        background-color: #333333;
-        color: #ffffff;
-      }
-
-      h1 {
-        color: #ffffff;
-        text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.6);
-      }
-
-      .scroll-indicator {
-        color: #d3d3d3;
-      }
-
-      .links a {
-        color: #999999;
-      }
-
-      .links a:hover {
-        color: #ffffff;
-      }
-    }
-
-    @media only screen and (max-width: 600px) {
-      h1 {
-        position: absolute;
-        top: 46%;
-        left: 50%;
-        font-size: 3em;
-        letter-spacing: 5px;
-        transition: transform 2s ease-in-out;
-      }
+      text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.6);
     }
 
     .scroll-indicator {
-      position: absolute;
-      bottom: 40px;
-      font-size: 1em;
-      opacity: 1;
-      animation: fadeOut 4s ease-in-out infinite;
-      text-align: center;
-    }
-
-    @keyframes fadeOut {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0;
-      }
-    }
-
-    .links {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 95px;
-      opacity: 0; /* 初始隐藏 */
-      pointer-events: none; /* 初始禁用鼠标事件 */
-      transition: opacity 2s ease-in-out;
-    }
-
-    .links.visible {
-      opacity: 1 !important;
-      pointer-events: auto; /* 启用鼠标事件 */
+      color: #d3d3d3;
     }
 
     .links a {
-      color: #999999;
-      text-decoration: none;
-      font-family: 'PingFangSC-Regular', sans-serif;
-      font-size: 1em;
-      letter-spacing: 0;
-      text-align: center;
-      margin-top: 12px;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-
-    .links.visible a {
-      opacity: 1;
+      color: #C5C5C5; /* 修改链接颜色为灰色，你可以根据需要调整颜色 */
     }
 
     .links a:hover {
-      color: #333333;
+      color: #ffffff; /* 修改链接悬停时的颜色 */
     }
-  </style>
+  }
+
+  /* 在窄屏幕下调整标题样式 */
+  @media only screen and (max-width: 600px) {
+    h1 {
+      position: absolute;
+      top: 46%;
+      left: 50%;
+      font-size: 3em;
+      letter-spacing: 5px;
+      transition: transform 2s ease-in-out;
+    }
+  }
+</style>
 </head>
 <body>
   <h1>CangWei</h1>

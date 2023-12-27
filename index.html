@@ -1,100 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CangWei</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            text-align: center;
-            color: #333; /* 修改字体颜色为黑色 */
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CangWei</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #ffffff;
+      opacity: 0.8;
+      background-image: radial-gradient(circle at center center, #fcfcfc, #ffffff), repeating-radial-gradient(circle at center center, #fcfcfc, #fcfcfc, 30px, transparent 60px, transparent 30px);
+      background-blend-mode: multiply;
+      position: relative;
+    }
 
-        header {
-            background: linear-gradient(to right, #1e17b9, #f6e33d, #0cc161); /* 深色彩色渐变背景 */
-            color: #fff;
-            padding: 1em 0;
-            background: linear-gradient(to right, #1e17b9, #f6e33d, #0cc161);
-            background-size: 200% 200%;
-            animation: gradientAnimation 10s ease infinite;
-        }
+    h1 {
+      position: absolute;
+      top: 40%; /* 调整初始top值 */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #ffffff;
+      font-family: 'Seaside Resort NF', cursive;
+      font-size: 7em; /* 调整初始大小 */
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+      letter-spacing: 10px;
+      transition: transform 2s ease-in-out, font-size 2s ease-in-out, top 2s ease-in-out; /* 添加滑动动画效果和字体大小动画效果 */
+    }
 
-        h1 {
-            font-size: 2.5em; /* 修改标题字体大小为2.5em（相对于父元素） */
-        }
+    /* 简单的手机端适配 */
+    @media only screen and (max-width: 600px) {
+      h1 {
+        position: absolute;
+        top: 46%; /* 调整初始top值 */
+        left: 50%;
+        font-size: 3em;
+        letter-spacing: 5px;
+        transition: transform 2s ease-in-out; /* 添加手机端上移动画效果 */
+      }
+    }
 
-        @keyframes gradientAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
+    /* 上滑提示特效 */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px; /* 调整到相对底部的距离 */
+      font-size: 1em;
+      color: #d3d3d3;
+      opacity: 1; /* 初始显示 */
+      animation: fadeOut 4s ease-in-out infinite; /* 循环动画，4秒一次 */
+      text-align: center; /* 文字居中 */
+    }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
+    @keyframes fadeOut {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+    }
 
-        li {
-            margin-bottom: 10px;
-            position: relative;
-        }
+    /* 超链接样式 - 默认隐藏 */
+    .links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 95px; /* 调整超链接整体位置 */
+      opacity: 0; /* 初始隐藏 */
+      transition: opacity 2s ease-in-out; /* 添加渐变效果 */
+    }
 
-        a {
-            text-decoration: none;
-            display: inline-block;
-        }
+    .links a {
+      color: #999999;
+      text-decoration: none;
+      font-family: 'PingFangSC-Regular', sans-serif;
+      font-size: 1em; /* 调整字体大小 */
+      letter-spacing: 0;
+      text-align: center;
+      margin-top: 12px; /* 超链接之间的间距 */
+      opacity: 0; /* 初始隐藏 */
+      transition: opacity 1s ease-in-out; /* 添加渐变效果 */
+    }
 
-        .btn {
-            padding: 8px 16px;
-            color: #3F85F7; /* 蓝色链接 */
-            border-radius: 5px;
-        }
+    .links a:hover {
+      color: #333333;
+    }
 
-        .symbol {
-            margin-right: 8px;
-            font-size: 1.2em;
-            color: #3F85F7; /* 与链接颜色保持一致 */
-        }
-
-        .separator {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 1px;
-            background-color: #ddd; /* 浅灰色分隔线的颜色，可以根据需要调整 */
-            content: '';
-        }
-    </style>
+    /* 修正样式冲突 */
+    .visible {
+      opacity: 1 !important;
+    }
+  </style>
 </head>
 <body>
+  <h1>CangWei</h1>
 
-<header>
-    <h1>CangWei</h1>
-</header>
+  <!-- 上滑提示 -->
+  <div class="scroll-indicator" id="scrollIndicator" onclick="hideScrollIndicator()"><span>点击显示更多</span></div>
 
-<ul>
-    <br>
-    <li><a class="btn" href="https://github.com/CangWeiohh"><span class="symbol">🔗</span>GitHub CangWeiohh</a></li>
-    <li><a class="btn" href="https://t.me/macOS_share"><span class="symbol">🔗</span>macOS分享频道</a></li>
-    <li><a class="btn" href="https://t.me/macOS_share_group"><span class="symbol">🔗</span>macOS交流频道</a></li>
-    <li><a class="btn" href="https://www.123pan.com/s/Zi5RVv-pcNud"><span class="symbol">🔗</span>macOS软件分享 123云盘持续更新中</a></li>
-    <li><a class="btn" href="https://www.123pan.com/s/Zi5RVv-5ZKud"><span class="symbol">🔗</span>Android车机软件分享 123云盘持续更新中</a></li>
-    <br>
-    <li><div class="separator"></div></li>
-    <br>
-    <li><a class="btn" href="https://cangweiohh.github.io/neta_mall/product_list.txt"><span class="symbol">🔗</span>哪吒商城 商品列表</a></li>
-</ul>
+  <!-- 超链接列表 -->
+  <div class="links" id="links">
+    <a href="https://github.com/CangWeiohh">GitHub CangWeiohh  ➤</a>
+    <a href="https://t.me/macOS_share">macOS分享频道  ➤</a>
+    <a href="https://t.me/macOS_share_group">macOS交流频道  ➤</a>
+    <a href="https://www.123pan.com/s/Zi5RVv-pcNud">macOS软件分享 123云盘持续更新中  ➤</a>
+    <a href="https://www.123pan.com/s/Zi5RVv-5ZKud">Android车机软件分享 123云盘持续更新中  ➤</a>
+    <a href="https://cangweiohh.github.io/neta_mall/product_list.txt">哪吒商城 商品列表  ➤</a>
+  </div>
 
+  <script>
+    function hideScrollIndicator() {
+      var scrollIndicator = document.getElementById('scrollIndicator');
+      if (scrollIndicator) {
+        scrollIndicator.style.display = 'none';
+      }
+    }
+
+    // 添加点击事件监听器，当用户点击时隐藏提示，并逐条显示超链接
+    var clicked = false;
+    window.addEventListener('click', function() {
+      if (!clicked) {
+        clicked = true;
+        var scrollIndicator = document.getElementById('scrollIndicator');
+        var linksContainer = document.getElementById('links');
+        var h1 = document.querySelector('h1');
+
+        if (scrollIndicator && linksContainer && h1) {
+          scrollIndicator.style.opacity = '0';
+          linksContainer.classList.add('visible');
+          // 添加条件判断，仅在非手机端调整 h1 的大小
+          if (window.innerWidth > 600) {
+            h1.style.transform = 'translate(-50%, -180%)'; /* 调整上移的距离 */
+            h1.style.fontSize = '4em'; /* 调整字体大小 */
+            h1.style.top = '44%'; /* 调整top值 */
+          } else {
+            // 在手机端添加上移的动画
+            h1.style.transform = 'translate(-50%, -220%)'; /* 调整上移的距离 */
+          }
+        }
+
+        // 逐条显示超链接
+        var links = document.querySelectorAll('.links a');
+        links.forEach(function(link, index) {
+          setTimeout(function() {
+            link.style.opacity = '1';
+          }, 500 * (index + 1)); // 每个链接延迟显示
+        });
+      }
+    });
+  </script>
 </body>
 </html>

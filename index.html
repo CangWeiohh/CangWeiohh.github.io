@@ -22,38 +22,36 @@
 
     h1 {
       position: absolute;
-      top: 40%; /* 调整初始top值 */
+      top: 40%;
       left: 50%;
       transform: translate(-50%, -50%);
       color: #ffffff;
       font-family: 'Seaside Resort NF', cursive;
-      font-size: 7em; /* 调整初始大小 */
+      font-size: 7em;
       text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
       letter-spacing: 10px;
-      transition: transform 2s ease-in-out, font-size 2s ease-in-out, top 2s ease-in-out; /* 添加滑动动画效果和字体大小动画效果 */
+      transition: transform 2s ease-in-out, font-size 2s ease-in-out, top 2s ease-in-out;
     }
 
-    /* 简单的手机端适配 */
     @media only screen and (max-width: 600px) {
       h1 {
         position: absolute;
-        top: 46%; /* 调整初始top值 */
+        top: 46%;
         left: 50%;
         font-size: 3em;
         letter-spacing: 5px;
-        transition: transform 2s ease-in-out; /* 添加手机端上移动画效果 */
+        transition: transform 2s ease-in-out;
       }
     }
 
-    /* 上滑提示特效 */
     .scroll-indicator {
       position: absolute;
-      bottom: 40px; /* 调整到相对底部的距离 */
+      bottom: 40px;
       font-size: 1em;
       color: #d3d3d3;
-      opacity: 1; /* 初始显示 */
-      animation: fadeOut 4s ease-in-out infinite; /* 循环动画，4秒一次 */
-      text-align: center; /* 文字居中 */
+      opacity: 1;
+      animation: fadeOut 4s ease-in-out infinite;
+      text-align: center;
     }
 
     @keyframes fadeOut {
@@ -65,45 +63,47 @@
       }
     }
 
-    /* 超链接样式 - 默认隐藏 */
     .links {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 95px; /* 调整超链接整体位置 */
+      margin-top: 95px;
       opacity: 0; /* 初始隐藏 */
-      transition: opacity 2s ease-in-out; /* 添加渐变效果 */
+      pointer-events: none; /* 初始禁用鼠标事件 */
+      transition: opacity 2s ease-in-out;
+    }
+
+    .links.visible {
+      opacity: 1 !important;
+      pointer-events: auto; /* 启用鼠标事件 */
     }
 
     .links a {
       color: #999999;
       text-decoration: none;
       font-family: 'PingFangSC-Regular', sans-serif;
-      font-size: 1em; /* 调整字体大小 */
+      font-size: 1em;
       letter-spacing: 0;
       text-align: center;
-      margin-top: 12px; /* 超链接之间的间距 */
-      opacity: 0; /* 初始隐藏 */
-      transition: opacity 1s ease-in-out; /* 添加渐变效果 */
+      margin-top: 12px;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .links.visible a {
+      opacity: 1;
     }
 
     .links a:hover {
       color: #333333;
     }
-
-    /* 修正样式冲突 */
-    .visible {
-      opacity: 1 !important;
-    }
   </style>
 </head>
 <body>
   <h1>CangWei</h1>
-
-  <!-- 上滑提示 -->
+  
   <div class="scroll-indicator" id="scrollIndicator" onclick="hideScrollIndicator()"><span>点击显示更多</span></div>
 
-  <!-- 超链接列表 -->
   <div class="links" id="links">
     <a href="https://github.com/CangWeiohh">GitHub CangWeiohh  ➤</a>
     <a href="https://t.me/macOS_share">macOS分享频道  ➤</a>
@@ -121,7 +121,6 @@
       }
     }
 
-    // 添加点击事件监听器，当用户点击时隐藏提示，并逐条显示超链接
     var clicked = false;
     window.addEventListener('click', function() {
       if (!clicked) {
@@ -133,23 +132,20 @@
         if (scrollIndicator && linksContainer && h1) {
           scrollIndicator.style.opacity = '0';
           linksContainer.classList.add('visible');
-          // 添加条件判断，仅在非手机端调整 h1 的大小
           if (window.innerWidth > 600) {
-            h1.style.transform = 'translate(-50%, -180%)'; /* 调整上移的距离 */
-            h1.style.fontSize = '4em'; /* 调整字体大小 */
-            h1.style.top = '44%'; /* 调整top值 */
+            h1.style.transform = 'translate(-50%, -180%)';
+            h1.style.fontSize = '4em';
+            h1.style.top = '44%';
           } else {
-            // 在手机端添加上移的动画
-            h1.style.transform = 'translate(-50%, -220%)'; /* 调整上移的距离 */
+            h1.style.transform = 'translate(-50%, -220%)';
           }
         }
 
-        // 逐条显示超链接
         var links = document.querySelectorAll('.links a');
         links.forEach(function(link, index) {
           setTimeout(function() {
             link.style.opacity = '1';
-          }, 500 * (index + 1)); // 每个链接延迟显示
+          }, 500 * (index + 1));
         });
       }
     });

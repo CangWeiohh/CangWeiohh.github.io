@@ -1,11 +1,18 @@
 
 -----------------------------------------------
 
-2023-12-28 04:00:05 - 共80个商品
+2023-12-28 04:20:47 - 共80个商品
 暂无可捡漏商品
 
 -----------------------------------------------
 
+
+商品名称：哪吒AYA尼龙平面脚垫
+车主价格：239
+应付积分：2390
+商品更新时间：2023-12-14 14:08:19
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230901/590708b4-bb98-4bfb-b95a-880f2743ae7d.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1697553266356428801
 
 商品名称：哪吒S冰箱贴
 车主价格：21
@@ -238,54 +245,40 @@
 商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230615/f3dd8084-8db4-45c1-9dce-e0ab924d2641.jpg
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1669168938384486401
 
+商品名称：哪吒AYA皮质大包围脚垫
+车主价格：298
+应付积分：2980
+商品更新时间：2023-12-14 15:25:53
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230901/0a5a8c77-9745-48ca-b7c1-b481979fef6a.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1697554050917769217
+
+商品名称：保值换新—哪吒GT系列车型
+车主价格：1599
+应付积分：15990
+商品更新时间：2023-12-07 21:24:42
+商品图片链接：N/A
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1679028137163046913
+
+商品名称：整车延保—哪吒V系列车型
+车主价格：1800
+应付积分：18000
+商品更新时间：2023-12-07 21:24:42
+商品图片链接：N/A
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1597849474993094658
+
+商品名称：整车延保—哪吒S系列车型
+车主价格：4200
+应付积分：42000
+商品更新时间：2023-12-07 21:24:42
+商品图片链接：N/A
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1597850761180610561
+
 商品名称：哪吒S-TPE后备箱垫
 车主价格：292
 应付积分：2920
 商品更新时间：2023-12-14 15:26:48
 商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/820f6e37-6f93-464e-a314-c36495813294.jpg
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1630462151608205313
-
-商品名称：呢仔定制款车位喷绘
-车主价格：1799
-应付积分：不支持积分兑换
-商品更新时间：2023-12-07 21:24:42
-商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/180088cb-2c28-4ffc-bc2f-5a923bab637e.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1650401669035302913
-
-商品名称：兰蔻196口红丝绒雾面哑光朱砂橘胡萝卜唇膏
-车主价格：320
-应付积分：3200
-商品更新时间：2023-12-07 21:24:42
-商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/ce56081f-017c-4f2d-9f23-b281dbd7f1f0.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1639085616061972482
-
-商品名称：哪吒AYA尼龙平面脚垫
-车主价格：239
-应付积分：2390
-商品更新时间：2023-12-14 14:08:19
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230901/590708b4-bb98-4bfb-b95a-880f2743ae7d.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1697553266356428801
-
-商品名称：哪吒S双层皮质脚垫
-车主价格：806
-应付积分：8060
-商品更新时间：2023-12-14 15:25:53
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230928/e729a101-60da-4c41-a80d-75c722a12559.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1707215339703296001
-
-商品名称：九号电动滑板车 C2 Pro
-车主价格：1399
-应付积分：13990
-商品更新时间：2023-12-19 14:50:09
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230915/c2cfb8c0-2e1b-4cd6-a973-d05a41835788.png
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1702583259022086145
-
-商品名称：保值换新—哪吒U系列
-车主价格：1199
-应付积分：11990
-商品更新时间：2023-12-07 21:24:42
-商品图片链接：N/A
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1597857556385103874
 
 商品名称：哪吒S 豪华定制遮阳帘
 车主价格：1380
@@ -308,6 +301,13 @@
 商品图片链接：N/A
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1731950871695908865
 
+商品名称：九号电动滑板车 C2 Pro
+车主价格：1399
+应付积分：13990
+商品更新时间：2023-12-19 14:50:09
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230915/c2cfb8c0-2e1b-4cd6-a973-d05a41835788.png
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1702583259022086145
+
 商品名称：哪吒GT 电池下护板
 车主价格：1549
 应付积分：15490
@@ -315,26 +315,19 @@
 商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20231205/c3ea446a-3ad1-44e6-8d12-5d5cc080f3dc.jpg
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1731947273243123713
 
-商品名称：保值换新—哪吒GT系列车型
-车主价格：1599
-应付积分：15990
-商品更新时间：2023-12-07 21:24:42
-商品图片链接：N/A
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1679028137163046913
-
-商品名称：整车延保—哪吒V系列车型
-车主价格：1800
-应付积分：18000
-商品更新时间：2023-12-07 21:24:42
-商品图片链接：N/A
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1597849474993094658
-
 商品名称：哪吒S 智能门把手
 车主价格：1600
 应付积分：16000
 商品更新时间：2023-12-20 16:26:51
 商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230727/56225e51-7067-4f02-8692-b537c88c4563.png
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1684523048926789634
+
+商品名称：呢仔定制款车位喷绘
+车主价格：1799
+应付积分：不支持积分兑换
+商品更新时间：2023-12-07 21:24:42
+商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/180088cb-2c28-4ffc-bc2f-5a923bab637e.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1650401669035302913
 
 商品名称：保值换新—哪吒S系列车型
 车主价格：1899
@@ -350,61 +343,12 @@
 商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230714/39c2fd85-7113-4c54-bc96-b44362fa6f43.jpg
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1679808460478038018
 
-商品名称：哪吒AYA皮质大包围脚垫
-车主价格：298
-应付积分：2980
-商品更新时间：2023-12-14 15:25:53
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230901/0a5a8c77-9745-48ca-b7c1-b481979fef6a.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1697554050917769217
-
-商品名称：车载游戏手柄
-车主价格：299
-应付积分：2990
-商品更新时间：2023-12-11 11:03:11
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230726/24263757-a0ff-48ff-96b5-58d4c6d40376.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1684142779073904642
-
-商品名称：逗映云台稳定器capture 2s
-车主价格：339
-应付积分：3390
-商品更新时间：2023-12-20 13:35:03
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230915/2e70459f-0985-4007-82e5-8cb2cc0e6aa1.png
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1702636127355785218
-
-商品名称：摩飞电热水壶-MR7456A
-车主价格：399
-应付积分：3990
-商品更新时间：2023-12-20 16:32:59
-商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/cb1f1c5d-b6ea-4d37-a56e-78dcf1e44191.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1642821261183655938
-
-商品名称：哪吒S天幕遮阳帘(麂皮面料）
-车主价格：368
-应付积分：3680
-商品更新时间：2023-12-14 15:27:18
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20231005/e190b888-6f7f-4d26-901a-ee96cab3bfb6.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1709772986174062593
-
-商品名称：哪吒GT运动双层皮质大包围脚垫
-车主价格：400
-应付积分：4000
-商品更新时间：2023-12-14 15:25:53
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230904/0d051cad-fc93-4031-aab1-9a69a01ac4d8.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1698514497733042178
-
-商品名称：哪吒汽车×爱可乐联名商旅登机箱20寸
-车主价格：699
-应付积分：6990
-商品更新时间：2023-12-13 11:06:16
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230602/e583a179-8bd9-41ec-b8a1-2e3501fc8749.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1664499758285529090
-
-商品名称：哪吒汽车-车载麦克风
-车主价格：399
-应付积分：3990
-商品更新时间：2023-12-26 10:27:57
-商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/823c37a9-6559-424e-af60-b410c1cfea65.png
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1575688876538646529
+商品名称：影石Insta 360 GO3运动套装
+车主价格：2468
+应付积分：24680
+商品更新时间：2023-12-20 13:39:17
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230915/70ed4ce1-7f0b-4bf1-a464-4efa9761bf46.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1702579042435506177
 
 商品名称：哪吒S 氛围灯
 车主价格：1800
@@ -413,61 +357,12 @@
 商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230727/51fae6e5-39ae-4f9f-b7e0-8fd6d78df124.jpg
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1684525551034646529
 
-商品名称：哪吒GT 运动尾翼套件
-车主价格：3000
-应付积分：30000
-商品更新时间：2023-12-07 21:24:43
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20231101/ede6f55e-84c4-4ce6-be6d-f845ab6a4ea4.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1715289605803925506
-
-商品名称：代步车年卡
-车主价格：350
-应付积分：3500
-商品更新时间：2023-12-07 21:24:42
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230810/fc7f9f36-1d44-4602-a72f-bb9bd57f4c75.png
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1688866371579478018
-
-商品名称：广东旅游权益卡
-车主价格：399
-应付积分：3990
-商品更新时间：2023-12-07 21:24:43
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20231030/5f6b1232-2e58-4264-b62f-7b2f2a8da1fe.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1718935527045783554
-
-商品名称：哪吒GT-TPE脚垫
-车主价格：300
-应付积分：3000
-商品更新时间：2023-12-14 15:25:53
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230901/82e8fc70-a2ec-42da-92b6-1319c118d6a5.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1697555230523826178
-
-商品名称：哪吒S 副驾娱乐屏
-车主价格：3000
-应付积分：30000
-商品更新时间：2023-12-07 21:24:43
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20231130/8413426e-b3a3-48fe-8c01-8593d72e044e.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1730141101564854274
-
-商品名称：哪吒家充桩服务包-B款
-车主价格：2700
-应付积分：不支持积分兑换
-商品更新时间：2023-12-14 15:27:50
-商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/9189aef8-ad43-4654-9e71-6d3dc5020363.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1550311928607084545
-
 商品名称：哪吒家充桩服务包-A款
 车主价格：2160
 应付积分：不支持积分兑换
 商品更新时间：2023-12-14 14:20:23
 商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/63758c69-8d9d-4522-8a9a-0488defd84b1.jpg
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1550310713567547394
-
-商品名称：整车延保—哪吒GT系列车型
-车主价格：3800
-应付积分：38000
-商品更新时间：2023-12-07 21:24:42
-商品图片链接：N/A
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1661664114834935809
 
 商品名称：SKII神仙水230ml面霜套装
 车主价格：2930
@@ -483,6 +378,20 @@
 商品图片链接：N/A
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1597850240105447425
 
+商品名称：哪吒家充桩服务包-B款
+车主价格：2700
+应付积分：不支持积分兑换
+商品更新时间：2023-12-14 15:27:50
+商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/9189aef8-ad43-4654-9e71-6d3dc5020363.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1550311928607084545
+
+商品名称：哪吒GT 运动尾翼套件
+车主价格：3000
+应付积分：30000
+商品更新时间：2023-12-07 21:24:43
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20231101/ede6f55e-84c4-4ce6-be6d-f845ab6a4ea4.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1715289605803925506
+
 商品名称：哪吒第二代家充桩
 车主价格：2960
 应付积分：29600
@@ -490,19 +399,12 @@
 商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/065eefce-e3e3-4d7b-b852-19d543e4bf8a.jpg
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1582188237103747074
 
-商品名称：哪吒20kW家充桩
-车主价格：12000
-应付积分：不支持积分兑换
-商品更新时间：2023-12-14 15:27:50
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230914/abcd27ea-a50b-4913-8ff9-51ff1ea831b1.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1702249808835944450
-
-商品名称：整车延保—哪吒S系列车型
-车主价格：4200
-应付积分：42000
-商品更新时间：2023-12-07 21:24:42
-商品图片链接：N/A
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1597850761180610561
+商品名称：哪吒S 副驾娱乐屏
+车主价格：3000
+应付积分：30000
+商品更新时间：2023-12-07 21:24:43
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20231130/8413426e-b3a3-48fe-8c01-8593d72e044e.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1730141101564854274
 
 商品名称：哪吒汽车三电延保
 车主价格：5500
@@ -511,12 +413,61 @@
 商品图片链接：N/A
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1664147630202032129
 
-商品名称：影石Insta 360 GO3运动套装
-车主价格：2468
-应付积分：24680
-商品更新时间：2023-12-20 13:39:17
-商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230915/70ed4ce1-7f0b-4bf1-a464-4efa9761bf46.jpg
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1702579042435506177
+商品名称：车载游戏手柄
+车主价格：299
+应付积分：2990
+商品更新时间：2023-12-11 11:03:11
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230726/24263757-a0ff-48ff-96b5-58d4c6d40376.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1684142779073904642
+
+商品名称：哪吒GT-TPE脚垫
+车主价格：300
+应付积分：3000
+商品更新时间：2023-12-14 15:25:53
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230901/82e8fc70-a2ec-42da-92b6-1319c118d6a5.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1697555230523826178
+
+商品名称：兰蔻196口红丝绒雾面哑光朱砂橘胡萝卜唇膏
+车主价格：320
+应付积分：3200
+商品更新时间：2023-12-07 21:24:42
+商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/ce56081f-017c-4f2d-9f23-b281dbd7f1f0.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1639085616061972482
+
+商品名称：代步车年卡
+车主价格：350
+应付积分：3500
+商品更新时间：2023-12-07 21:24:42
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230810/fc7f9f36-1d44-4602-a72f-bb9bd57f4c75.png
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1688866371579478018
+
+商品名称：摩飞电热水壶-MR7456A
+车主价格：399
+应付积分：3990
+商品更新时间：2023-12-20 16:32:59
+商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/cb1f1c5d-b6ea-4d37-a56e-78dcf1e44191.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1642821261183655938
+
+商品名称：广东旅游权益卡
+车主价格：399
+应付积分：3990
+商品更新时间：2023-12-07 21:24:43
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20231030/5f6b1232-2e58-4264-b62f-7b2f2a8da1fe.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1718935527045783554
+
+商品名称：哪吒S天幕遮阳帘(麂皮面料）
+车主价格：368
+应付积分：3680
+商品更新时间：2023-12-14 15:27:18
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20231005/e190b888-6f7f-4d26-901a-ee96cab3bfb6.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1709772986174062593
+
+商品名称：逗映云台稳定器capture 2s
+车主价格：339
+应付积分：3390
+商品更新时间：2023-12-20 13:35:03
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230915/2e70459f-0985-4007-82e5-8cb2cc0e6aa1.png
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1702636127355785218
 
 商品名称：TF16/80滋润单支装口红套装
 车主价格：490
@@ -525,19 +476,12 @@
 商品图片链接：N/A
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1641013084494471169
 
-商品名称：哪吒GT 空气动力学运动包围套件
-车主价格：6000
-应付积分：60000
-商品更新时间：2023-12-07 21:24:43
-商品图片链接：N/A
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1715286536265457665
-
-商品名称：哪吒GT 豪华定制遮阳帘
-车主价格：1180
-应付积分：11800
-商品更新时间：2023-12-07 21:24:42
-商品图片链接：N/A
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1694296833657577473
+商品名称：哪吒GT运动双层皮质大包围脚垫
+车主价格：400
+应付积分：4000
+商品更新时间：2023-12-14 15:25:53
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230904/0d051cad-fc93-4031-aab1-9a69a01ac4d8.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1698514497733042178
 
 商品名称：哪吒U高级皮革脚垫
 车主价格：598
@@ -546,6 +490,27 @@
 商品图片链接：N/A
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1707415815480729601
 
+商品名称：保值换新—哪吒U系列
+车主价格：1199
+应付积分：11990
+商品更新时间：2023-12-07 21:24:42
+商品图片链接：N/A
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1597857556385103874
+
+商品名称：哪吒汽车-车载麦克风
+车主价格：399
+应付积分：3990
+商品更新时间：2023-12-26 10:27:57
+商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/823c37a9-6559-424e-af60-b410c1cfea65.png
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1575688876538646529
+
+商品名称：哪吒GT 空气动力学运动包围套件
+车主价格：6000
+应付积分：60000
+商品更新时间：2023-12-07 21:24:43
+商品图片链接：N/A
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1715286536265457665
+
 商品名称：哪吒魔小童
 车主价格：3600
 应付积分：36000
@@ -553,12 +518,33 @@
 商品图片链接：https://hz1-hozon-prod.oss-cn-hangzhou.aliyuncs.com/1501391403178266624/material/69141436-f952-4f8c-b3e3-1674ebb18d70.jpg
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1592772038526357505
 
-商品名称：保值换新—哪吒V系列车型
-车主价格：999
-应付积分：9990
+商品名称：哪吒S双层皮质脚垫
+车主价格：806
+应付积分：8060
+商品更新时间：2023-12-14 15:25:53
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230928/e729a101-60da-4c41-a80d-75c722a12559.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1707215339703296001
+
+商品名称：哪吒20kW家充桩
+车主价格：12000
+应付积分：不支持积分兑换
+商品更新时间：2023-12-14 15:27:50
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230914/abcd27ea-a50b-4913-8ff9-51ff1ea831b1.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1702249808835944450
+
+商品名称：哪吒GT 豪华定制遮阳帘
+车主价格：1180
+应付积分：11800
 商品更新时间：2023-12-07 21:24:42
 商品图片链接：N/A
-商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1597856963578953729
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1694296833657577473
+
+商品名称：哪吒汽车×爱可乐联名商旅登机箱20寸
+车主价格：699
+应付积分：6990
+商品更新时间：2023-12-13 11:06:16
+商品图片链接：https://netaprod-static.hozonauto.com/1501391403178266624/material/20230602/e583a179-8bd9-41ec-b8a1-2e3501fc8749.jpg
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1664499758285529090
 
 商品名称：哪吒GT 空气动力学运动包围+尾翼套件
 车主价格：9000
@@ -566,3 +552,17 @@
 商品更新时间：2023-12-07 21:24:43
 商品图片链接：N/A
 商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1715291207195082754
+
+商品名称：整车延保—哪吒GT系列车型
+车主价格：3800
+应付积分：38000
+商品更新时间：2023-12-07 21:24:42
+商品图片链接：N/A
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1661664114834935809
+
+商品名称：保值换新—哪吒V系列车型
+车主价格：999
+应付积分：9990
+商品更新时间：2023-12-07 21:24:42
+商品图片链接：N/A
+商品链接：https://shop-wap.hozonauto.com/gateway/mallapi/goodsspu/1597856963578953729

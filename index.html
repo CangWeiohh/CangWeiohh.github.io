@@ -17,7 +17,7 @@
       justify-content: center;
       background-color: #ffffff;
       opacity: 0.8;
-      background-image: radial-gradient(circle at center center, #f8f8ff, #ffffff), repeating-radial-gradient(circle at center center, #f8f8ff, #f8f8ff, 30px, transparent 60px, transparent 30px);
+      background-image: radial-gradient(circle at center center, #F3F3F3, #ffffff), repeating-radial-gradient(circle at center center, #F3F3F3, #F3F3F3, 30px, transparent 60px, transparent 30px);
       background-blend-mode: multiply;
       position: relative;
     }
@@ -35,7 +35,7 @@
       top: 40%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: #F8F8FF;
+      color: #FFFFFF;
       font-family: 'Seaside Resort NF', cursive;
       font-size: 7em;
       text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
@@ -47,7 +47,7 @@
       position: absolute;
       bottom: 40px;
       font-size: 1em;
-      color: #C9C9C9;
+      color: #CFCFCF;
       opacity: 1;
       animation: fadeOut 4s ease-in-out infinite;
       text-align: center;
@@ -84,7 +84,7 @@
     }
 
     .links a {
-      color: #9B97AB;
+      color: #8A8A8A;
       text-decoration: none;
       font-family: 'PingFangSC-Regular', sans-serif;
       font-size: 1em;
@@ -100,7 +100,7 @@
     }
 
     .links a:hover {
-      color: #565264;
+      color: #0F0F0F;
     }
 
     /* 在深色模式下修改链接颜色 */
@@ -160,16 +160,16 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
       var scrollIndicator = document.getElementById('scrollIndicator');
       var linksContainer = document.getElementById('links');
       var h1 = document.querySelector('h1');
-
+  
       function hideScrollIndicator() {
         if (scrollIndicator && linksContainer) {
           scrollIndicator.style.display = 'none';
           linksContainer.classList.add('visible');
-
+  
           if (window.innerWidth > 600) {
             h1.style.transform = 'translate(-50%, -180%)';
             h1.style.fontSize = '4em';
@@ -177,25 +177,28 @@
           } else {
             h1.style.transform = 'translate(-50%, -220%)';
           }
-
+  
           var links = document.querySelectorAll('.links a');
-          links.forEach(function (link, index) {
-            link.style.opacity = '0';
-            setTimeout(function () {
-              link.style.opacity = '1';
-            }, 500 * (index + 1));
+          links.forEach(function(link, index) {
+            if (!link.classList.contains('animated')) {
+              link.style.opacity = '0';
+              setTimeout(function() {
+                link.style.opacity = '1';
+                link.classList.add('animated');
+              }, 500 * (index + 1));
+            }
           });
         }
       }
-
-      document.addEventListener('click', function (event) {
+  
+      document.addEventListener('click', function(event) {
         var target = event.target;
-
+  
         if (target.id !== 'scrollIndicator' && target.parentNode.id !== 'links') {
           hideScrollIndicator();
         }
       });
-
+  
       scrollIndicator.addEventListener('click', hideScrollIndicator);
     });
   </script>

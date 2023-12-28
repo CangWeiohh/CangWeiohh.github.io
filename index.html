@@ -169,6 +169,7 @@
 
         var links = document.querySelectorAll('.links a');
         links.forEach(function(link, index) {
+          link.style.opacity = '0';
           setTimeout(function() {
             link.style.opacity = '1';
           }, 500 * (index + 1));

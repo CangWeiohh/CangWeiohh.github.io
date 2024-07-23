@@ -1,35 +1,13 @@
-首先，确保卸载旧版本的 Docker（如果存在）：
-sudo apt-get remove docker docker-engine docker.io containerd runc
+#!/bin/bash
 
-更新包索引：
-sudo apt-get update
+# 脚本路径
+SCRIPT_PATH="/path/to/x-ui"
 
-安装必要的依赖：
-sudo apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+# 切换到脚本所在目录
+cd $SCRIPT_PATH || { echo "Failed to change directory to $SCRIPT_PATH"; exit 1; }
 
-添加 Docker 的官方 GPG 密钥：
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+# 启动 x-ui 并将输出重定向到 x-ui.log
+sudo nohup ./x-ui > x-ui.log 2>&1 &
 
-设置稳定版仓库：
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-再次更新包索引：
-sudo apt-get update
-
-安装 Docker Engine：
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
-验证安装：
-sudo docker run hello-world
-
-（可选）如果您想在没有 sudo 的情况下运行 Docker 命令，可以将您的用户添加到 docker 组：
-sudo usermod -aG docker $USER
-注意：这一步之后，您需要注销并重新登录才能生效。
-如果您的系统没有使用 systemd，您可能需要手动启动 Docker 守护进程：
-sudo dockerd &
-或者创建一个启动脚本来自动启动 Docker。
-检查 Docker 版本：
-docker --version
-
-查看更详细的系统信息：
-docker info
+# 打印消息，表示脚本已启动
+echo "x-ui has been started in the background. Check x-ui.log for output."

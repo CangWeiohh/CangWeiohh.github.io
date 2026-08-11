@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="UTF-8">
+<title>Log Viewer</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    height:100vh;
+    background:#0f172a;
+    color:#e5e7eb;
+    font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SFMono-Regular",
+    monospace;
+}
+
+
+.header{
+
+    height:60px;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 20px;
+
+    background:#111827;
+
+    border-bottom:1px solid #334155;
+
+}
+
+
+.logo{
+
+    font-size:18px;
+
+    font-weight:600;
+
+    margin-right:auto;
+
+}
+
+
+
+button{
+
+    border:0;
+
+    padding:8px 16px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    color:white;
+
+    background:#2563eb;
+
+    margin-left:10px;
+
+}
+
+
+
+button:hover{
+
+    opacity:.85;
+
+}
+
+
+
+button.danger{
+
+    background:#dc2626;
+
+}
+
+
+
+.layout{
+
+    height:calc(100vh - 60px);
+
+    display:flex;
+
+}
+
+
+
+.sidebar{
+
+    width:280px;
+
+    background:#111827;
+
+    border-right:1px solid #334155;
+
+    padding:15px;
+
+    overflow:auto;
+
+    transition:.25s;
+
+}
+
+
+.sidebar.hide{
+
+    width:0;
+
+    padding:0;
+
+    overflow:hidden;
+
+    border-right:0;
+
+}
+
+
+#toggleSidebar{
+
+    background:#374151;
+
+    margin-left:0;
+
+    width:38px;
+
+    padding:8px;
+
+}
+
+
+.sidebar-title{
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+    margin-bottom:10px;
+
+}
+
+
+
+.history{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+
+
+.item{
+
+    padding:10px;
+
+    border-radius:8px;
+
+    background:#1e293b;
+
+    cursor:pointer;
+
+    position:relative;
+
+}
+
+
+
+.item:hover{
+
+    background:#334155;
+
+}
+
+
+
+.item.active{
+
+    border:1px solid #3b82f6;
+
+}
+
+
+
+.name{
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
+
+    padding-right:20px;
+
+}
+
+
+
+.time{
+
+    font-size:12px;
+
+    color:#94a3b8;
+
+    margin-top:5px;
+
+}
+
+
+
+.delete{
+
+    position:absolute;
+
+    right:8px;
+
+    top:8px;
+
+    color:#f87171;
+
+    cursor:pointer;
+
+}
+
+
+
+.main{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+
+.status{
+
+    height:42px;
+
+    padding:12px 15px;
+
+    border-bottom:1px solid #334155;
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+}
+
+
+
+#log{
+
+    flex:1;
+
+    overflow:auto;
+
+    padding:20px;
+
+    white-space:pre-wrap;
+
+    word-break:break-all;
+
+    font-size:13px;
+
+    line-height:1.6;
+
+}
+
+
+
+.empty{
+
+    text-align:center;
+
+    margin-top:100px;
+
+    color:#64748b;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+
+<button id="toggleSidebar">
+☰
+</button>
+
+
+
+
+
+<button id="open">
+打开日志
+</button>
+
+
+<button id="clear"
+class="danger">
+清空历史
+</button>
+
+
+</div>
+
+
+
+<div class="layout">
+
+
+<div class="sidebar">
+
+
+<div class="sidebar-title">
+最近打开
+</div>
+
+
+<div id="history"
+class="history">
+</div>
+
+
+</div>
+
+
+
+<div class="main">
+
+
+<div id="status"
+class="status">
+未打开文件
+</div>
+
+
+<div id="log">
+
+<div class="empty">
+请选择日志文件
+</div>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+<script>
+
+
+const DB_NAME="log_viewer_db";
+
+const STORE="handles";
+
+
+let currentHandle=null;
+
+let currentId=null;
+
+let timer=null;
+
+let lastSize=0;
+
+
+
+/**********************
+ IndexedDB
+**********************/
+
+
+function openDB(){
+
+
+return new Promise(resolve=>{
+
+
+let req=
+indexedDB.open(
+DB_NAME,
+1
+);
+
+
+
+req.onupgradeneeded=e=>{
+
+
+e.target.result
+.createObjectStore(
+STORE
+);
+
+
+};
+
+
+
+req.onsuccess=e=>{
+
+resolve(
+e.target.result
+);
+
+};
+
+
+});
+
+
+}
+
+
+
+
+async function saveHandle(id,handle){
+
+
+let db=
+await openDB();
+
+
+let tx=
+db.transaction(
+STORE,
+"readwrite"
+);
+
+
+tx.objectStore(STORE)
+.put(
+handle,
+id
+);
+
+
+}
+
+
+
+async function getHandle(id){
+
+
+let db=
+await openDB();
+
+
+return new Promise(resolve=>{
+
+
+let req=
+db.transaction(
+STORE
+)
+.objectStore(STORE)
+.get(id);
+
+
+
+req.onsuccess=()=>{
+
+resolve(req.result);
+
+};
+
+
+
+});
+
+
+}
+
+
+
+
+async function removeHandle(id){
+
+
+let db=
+await openDB();
+
+
+db.transaction(
+STORE,
+"readwrite"
+)
+.objectStore(STORE)
+.delete(id);
+
+
+}
+
+
+
+
+/**********************
+ 历史记录
+**********************/
+
+const sidebar =
+document.querySelector(".sidebar");
+
+
+const toggleBtn =
+document.getElementById(
+"toggleSidebar"
+);
+
+
+
+function restoreSidebar(){
+
+
+let hide =
+localStorage.getItem(
+"sidebar_hide"
+);
+
+
+
+if(hide==="true"){
+
+sidebar.classList.add(
+"hide"
+);
+
+}
+
+
+}
+
+
+
+toggleBtn.onclick=()=>{
+
+
+sidebar.classList.toggle(
+"hide"
+);
+
+
+localStorage.setItem(
+"sidebar_hide",
+
+sidebar.classList.contains(
+"hide"
+)
+
+);
+
+
+};
+
+
+
+restoreSidebar();
+
+function getHistory(){
+
+
+return JSON.parse(
+localStorage.getItem(
+"log_history"
+)
+||"[]"
+);
+
+
+}
+
+
+
+function saveHistory(id,handle){
+
+
+let list=
+getHistory();
+
+
+list=
+list.filter(
+x=>x.id!==id
+);
+
+
+
+list.unshift({
+
+id:id,
+
+name:handle.name,
+
+time:
+new Date()
+.toLocaleString()
+
+});
+
+
+
+list=list.slice(0,30);
+
+
+
+localStorage.setItem(
+"log_history",
+JSON.stringify(list)
+);
+
+
+
+renderHistory();
+
+
+}
+
+
+
+function deleteHistory(id){
+
+
+let list=
+getHistory()
+.filter(
+x=>x.id!==id
+);
+
+
+
+localStorage.setItem(
+"log_history",
+JSON.stringify(list)
+);
+
+
+
+removeHandle(id);
+
+
+renderHistory();
+
+
+}
+
+
+
+
+function renderHistory(){
+
+
+let box=
+document.getElementById(
+"history"
+);
+
+
+
+box.innerHTML="";
+
+
+
+getHistory()
+.forEach(item=>{
+
+
+let div=
+document.createElement(
+"div"
+);
+
+
+
+div.className=
+"item";
+
+
+
+if(item.id===currentId){
+
+div.classList.add(
+"active"
+);
+
+}
+
+
+
+div.innerHTML=`
+
+<div class="name">
+${item.name}
+</div>
+
+<div class="time">
+${item.time}
+</div>
+
+<div class="delete">
+×
+</div>
+
+`;
+
+
+
+div.onclick=
+()=>openHistory(item.id);
+
+
+
+div.querySelector(".delete")
+.onclick=e=>{
+
+e.stopPropagation();
+
+deleteHistory(item.id);
+
+};
+
+
+
+box.appendChild(div);
+
+
+
+});
+
+
+
+}
+
+
+
+
+/**********************
+ 文件处理
+**********************/
+
+
+
+async function openHistory(id){
+
+
+let handle=
+await getHandle(id);
+
+
+
+if(!handle){
+
+alert(
+"文件句柄不存在，请重新选择"
+);
+
+return;
+
+}
+
+
+
+let permission=
+await handle.queryPermission({
+mode:"read"
+});
+
+
+
+if(permission!=="granted"){
+
+permission=
+await handle.requestPermission({
+mode:"read"
+});
+
+
+}
+
+
+
+if(permission==="granted"){
+
+
+currentHandle=
+handle;
+
+
+currentId=
+id;
+
+
+await readFile();
+
+
+watch();
+
+
+renderHistory();
+
+
+}
+
+
+}
+
+
+
+
+async function readFile(){
+
+
+if(!currentHandle)
+return;
+
+
+
+let file=
+await currentHandle.getFile();
+
+
+
+let text=
+await file.text();
+
+
+
+document
+.getElementById("log")
+.textContent=
+text;
+
+
+
+document
+.getElementById("status")
+.textContent=
+`${file.name}  |  ${formatSize(file.size)}`;
+
+
+
+lastSize=file.size;
+
+
+scrollBottom();
+
+
+}
+
+
+
+
+function formatSize(size){
+
+
+if(size>1024*1024)
+
+return(
+(size/1024/1024)
+.toFixed(2)
++" MB"
+);
+
+
+return(
+(size/1024)
+.toFixed(2)
++" KB"
+);
+
+
+}
+
+
+
+
+function scrollBottom(){
+
+
+let el=
+document.getElementById(
+"log"
+);
+
+
+el.scrollTop=
+el.scrollHeight;
+
+
+}
+
+
+
+function watch(){
+
+
+if(timer)
+clearInterval(timer);
+
+
+
+timer=
+setInterval(async()=>{
+
+
+try{
+
+
+let file=
+await currentHandle.getFile();
+
+
+
+if(file.size!==lastSize){
+
+await readFile();
+
+}
+
+
+
+}catch(e){
+
+
+console.log(e);
+
+
+}
+
+
+
+},1000);
+
+
+}
+
+
+
+
+
+/**********************
+ 打开按钮
+**********************/
+
+
+
+document
+.getElementById("open")
+.onclick=
+async()=>{
+
+
+try{
+
+
+let [
+handle
+]=
+await showOpenFilePicker({
+
+types:[{
+
+description:"Log",
+
+accept:{
+
+"text/plain":[
+".log",
+".txt"
+]
+
+}
+
+}]
+
+
+});
+
+
+
+let id=
+crypto.randomUUID();
+
+
+
+await saveHandle(
+id,
+handle
+);
+
+
+
+saveHistory(
+id,
+handle
+);
+
+
+
+currentHandle=
+handle;
+
+
+currentId=
+id;
+
+
+
+await readFile();
+
+
+watch();
+
+
+
+}
+catch(e){
+
+console.log(e);
+
+}
+
+
+};
+
+
+
+
+document
+.getElementById("clear")
+.onclick=
+()=>{
+
+
+localStorage.removeItem(
+"log_history"
+);
+
+
+renderHistory();
+
+
+};
+
+
+
+
+
+
+/**********************
+ 初始化恢复
+**********************/
+
+
+
+(async()=>{
+
+
+renderHistory();
+
+
+
+let last=
+localStorage.getItem(
+"current_file"
+);
+
+
+
+if(last){
+
+
+await openHistory(last);
+
+
+}
+
+
+})();
+
+
+
+
+</script>
+
+</body>
+
+</html>

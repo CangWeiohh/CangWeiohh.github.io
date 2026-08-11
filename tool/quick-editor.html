@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quick Editor</title>
+
+<style>
+
+/* 颜色模式变量（深色为默认） */
+
+:root {
+    --bg: #1e1e1e;
+    --fg: #ddd;
+    --toolbar-bg: #252525;
+    --border: #333;
+    --border-strong: #444;
+    --btn-bg: #3a3a3a;
+    --btn-hover: #555;
+    --btn-fg: #ddd;
+    --editor-bg: #111;
+    --editor-fg: #eee;
+    --caret: white;
+    --preview-bg: #181818;
+    --h-fg: #fff;
+    --h6-fg: #aaa;
+    --link-fg: #4db8ff;
+    --strong-fg: #fff;
+    --del-fg: #888;
+    --code-bg: #2a2a2a;
+    --code-fg: #e6c07b;
+    --pre-bg: #0d0d0d;
+    --pre-fg: #e6e6e6;
+    --bq-bg: #1f1f1f;
+    --bq-fg: #aaa;
+    --bq-border: #555;
+    --th-bg: #2a2a2a;
+    --th-fg: #fff;
+    --striped-bg: #1c1c1c;
+    --status-bg: #202020;
+    --status-fg: #888;
+    --hl-code: #e6c07b;
+    --hl-mark: #6cb6ff;
+    --hl-em: #c586c0;
+    --hl-link: #ce9178;
+    --hl-url: #4ec9b0;
+    --hl-quote: #6a9955;
+    --hl-list: #6796e6;
+    --hl-hr: #808080;
+    --hl-del: #808080;
+}
+
+:root.light {
+    --bg: #f5f6f8;
+    --fg: #3a3a3a;
+    --toolbar-bg: #ffffff;
+    --border: #d0d5dc;
+    --border-strong: #c2c8d0;
+    --btn-bg: #e8eaee;
+    --btn-hover: #d6dae0;
+    --btn-fg: #333;
+    --editor-bg: #ffffff;
+    --editor-fg: #2d2d2d;
+    --caret: #333;
+    --preview-bg: #fbfcfd;
+    --h-fg: #1f2328;
+    --h6-fg: #6a737d;
+    --link-fg: #0969da;
+    --strong-fg: #1f2328;
+    --del-fg: #8b949e;
+    --code-bg: #eef1f4;
+    --code-fg: #b35900;
+    --pre-bg: #f6f8fa;
+    --pre-fg: #2d2d2d;
+    --bq-bg: #f0f3f6;
+    --bq-fg: #57606a;
+    --bq-border: #c6cdd5;
+    --th-bg: #eef1f4;
+    --th-fg: #1f2328;
+    --striped-bg: #f6f8fa;
+    --status-bg: #f0f2f4;
+    --status-fg: #6a737d;
+    --hl-code: #b35900;
+    --hl-mark: #0969da;
+    --hl-em: #af00db;
+    --hl-link: #a31515;
+    --hl-url: #0451a5;
+    --hl-quote: #008000;
+    --hl-list: #0431fa;
+    --hl-hr: #767676;
+    --hl-del: #767676;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+
+body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "Segoe UI",
+        sans-serif;
+}
+
+
+.container {
+
+    display:flex;
+    flex-direction:column;
+
+    width:100%;
+    height:100%;
+
+}
+
+
+/* 顶部工具栏 */
+
+.toolbar {
+
+    height:42px;
+
+    display:flex;
+    align-items:center;
+
+    gap:8px;
+
+    padding:6px 8px;
+
+    background: var(--toolbar-bg);
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+
+button {
+
+    height:28px;
+
+    padding:
+        0 12px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background: var(--btn-bg);
+
+    color: var(--btn-fg);
+
+    cursor:pointer;
+
+    font-size:13px;
+
+}
+
+
+button:hover {
+
+    background: var(--btn-hover);
+
+}
+
+
+/* 主题切换按钮（右上角） */
+
+.theme-btn {
+
+    margin-left:auto;
+
+    width:36px;
+
+    padding:0;
+
+    font-size:14px;
+
+    line-height:1;
+
+}
+
+
+/* 编辑区域 */
+
+.editor-area {
+
+    flex:1;
+
+    min-height:0;
+
+    display:flex;
+
+    position:relative;
+
+    background: var(--editor-bg);
+
+}
+
+
+
+/* 输入框 */
+
+textarea {
+
+    display:block;
+
+    width:100%;
+
+    height:100%;
+
+    flex:1;
+
+    resize:none;
+
+    border:none;
+
+    outline:none;
+
+    padding:15px;
+
+    background: transparent;
+
+    color: transparent;
+
+    caret-color: var(--caret);
+
+    font-size:14px;
+
+    line-height:1.6;
+
+    font-family:
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+
+    position:relative;
+
+    z-index:1;
+
+    overflow:auto;
+
+}
+
+textarea::selection {
+
+    background: rgba(128, 128, 128, 0.35);
+
+}
+
+
+/* 反引号高亮层 */
+
+.hl-layer {
+
+    position:absolute;
+
+    inset:0;
+
+    padding:15px;
+
+    overflow:hidden;
+
+    pointer-events:none;
+
+    white-space:pre-wrap;
+
+    word-break:break-all;
+
+    font-size:14px;
+
+    line-height:1.6;
+
+    font-family:
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+
+    color: var(--editor-fg);
+
+    margin:0;
+
+}
+
+.hl-layer .hl-code {
+
+    color: var(--hl-code);
+
+}
+
+.hl-layer .hl-mark {
+
+    color: var(--hl-mark);
+
+    font-weight:700;
+
+}
+
+.hl-layer .hl-em {
+
+    color: var(--hl-em);
+
+    font-style:italic;
+
+}
+
+.hl-layer .hl-link {
+
+    color: var(--hl-link);
+
+}
+
+.hl-layer .hl-url {
+
+    color: var(--hl-url);
+
+    text-decoration:underline;
+
+}
+
+.hl-layer .hl-quote {
+
+    color: var(--hl-quote);
+
+    font-style:italic;
+
+}
+
+.hl-layer .hl-list {
+
+    color: var(--hl-list);
+
+}
+
+.hl-layer .hl-hr {
+
+    color: var(--hl-hr);
+
+}
+
+.hl-layer .hl-del {
+
+    color: var(--hl-del);
+
+    text-decoration:line-through;
+
+}
+
+
+
+/* 预览 */
+
+.preview {
+
+    display:none;
+
+    width:100%;
+
+    height:100%;
+
+    overflow:auto;
+
+    padding:15px;
+
+    background: var(--preview-bg);
+
+    color: var(--fg);
+
+    line-height:1.7;
+
+}
+
+
+/* 预览元素样式 */
+
+.preview h1,
+.preview h2,
+.preview h3,
+.preview h4,
+.preview h5,
+.preview h6 {
+    margin:18px 0 8px;
+    line-height:1.3;
+    color: var(--h-fg);
+}
+
+.preview h1 {
+    font-size:1.8em;
+    border-bottom:1px solid var(--border-strong);
+    padding-bottom:6px;
+}
+
+.preview h2 {
+    font-size:1.5em;
+    border-bottom:1px solid var(--border);
+    padding-bottom:4px;
+}
+
+.preview h3 { font-size:1.25em; }
+.preview h4 { font-size:1.1em; }
+.preview h5 { font-size:1em; }
+.preview h6 { font-size:0.9em; color: var(--h6-fg); }
+
+.preview p { margin:8px 0; }
+
+.preview a {
+    color: var(--link-fg);
+    text-decoration:none;
+}
+
+.preview a:hover {
+    text-decoration:underline;
+}
+
+.preview strong { color: var(--strong-fg); font-weight:700; }
+.preview em { font-style:italic; }
+.preview del { color: var(--del-fg); text-decoration:line-through; }
+
+.preview code {
+    font-family:Menlo, Monaco, Consolas, monospace;
+    font-size:0.9em;
+    background: var(--code-bg);
+    padding:2px 5px;
+    border-radius:4px;
+    color: var(--code-fg);
+}
+
+.preview pre {
+    background: var(--pre-bg);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:12px;
+    overflow:auto;
+    margin:10px 0;
+}
+
+.preview pre code {
+    background:none;
+    padding:0;
+    color: var(--pre-fg);
+}
+
+.preview blockquote {
+    margin:10px 0;
+    padding:6px 14px;
+    border-left:3px solid var(--bq-border);
+    color: var(--bq-fg);
+    background: var(--bq-bg);
+}
+
+.preview ul,
+.preview ol {
+    margin:8px 0;
+    padding-left:26px;
+}
+
+.preview li { margin:3px 0; }
+
+.preview ul.task-list {
+    list-style:none;
+    padding-left:6px;
+}
+
+.preview ul.task-list input {
+    margin-right:6px;
+}
+
+.preview hr {
+    border:none;
+    border-top:1px solid var(--border-strong);
+    margin:16px 0;
+}
+
+.preview img {
+    max-width:100%;
+    border-radius:6px;
+}
+
+.preview table {
+    border-collapse:collapse;
+    margin:10px 0;
+    max-width:100%;
+}
+
+.preview th,
+.preview td {
+    border:1px solid var(--border-strong);
+    padding:6px 12px;
+}
+
+.preview th {
+    background: var(--th-bg);
+    color: var(--th-fg);
+}
+
+.preview tr:nth-child(even) td {
+    background: var(--striped-bg);
+}
+
+
+
+/* 底部状态 */
+
+.status {
+
+    height:24px;
+
+    padding-left:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    font-size:12px;
+
+    color: var(--status-fg);
+
+    background: var(--status-bg);
+
+}
+
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<div class="toolbar">
+
+<button onclick="copyText()">
+复制
+</button>
+
+
+<button onclick="togglePreview()">
+预览
+</button>
+
+
+<button onclick="clearText()">
+清空
+</button>
+
+
+<button onclick="saveText()">
+保存
+</button>
+
+
+<button onclick="jumpToTop()">
+顶部
+</button>
+
+
+<button onclick="jumpToBottom()">
+底部
+</button>
+
+
+<button
+id="themeBtn"
+class="theme-btn"
+onclick="toggleTheme()"
+title="切换颜色模式">
+🌙
+</button>
+
+
+</div>
+
+
+
+<div class="editor-area">
+
+
+<textarea
+id="editor"
+spellcheck="false"
+placeholder=""></textarea>
+
+
+<pre
+id="hlLayer"
+class="hl-layer"
+aria-hidden="true"></pre>
+
+
+
+<div
+id="preview"
+class="preview">
+</div>
+
+
+</div>
+
+
+
+<div
+id="status"
+class="status">
+
+自动保存开启
+
+</div>
+
+
+
+</div>
+
+
+
+<script>
+
+
+const editor =
+    document.getElementById("editor");
+
+
+const preview =
+    document.getElementById("preview");
+
+
+const status =
+    document.getElementById("status");
+
+
+const hlLayer =
+    document.getElementById("hlLayer");
+
+
+
+/*
+ 语法高亮
+*/
+
+// 高亮渲染：反引号、标题行、加粗（均含标记符号本身）
+function renderHighlight() {
+
+    let text =
+        editor.value
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+
+    // 已生成的 span 存入占位符，避免被后续正则再次匹配
+    const parts = [];
+
+    const hold = (cls, s) => {
+        parts.push('<span class="' + cls + '">' + s + "</span>");
+        return "\x00" + (parts.length - 1) + "\x00";
+    };
+
+    // ---- 代码优先：内部符号全部不再参与后续匹配 ----
+
+    // 围栏代码块 ```...```
+    text = text.replace(
+        /^```.*$[\s\S]*?^```$/gm,
+        m => hold("hl-code", m)
+    );
+
+    // 行内代码 `...`
+    text = text.replace(
+        /`[^`\n]+`/g,
+        m => hold("hl-code", m)
+    );
+
+    // ---- 行级标记 ----
+
+    // 标题行 # ~ ######（整行）
+    text = text.replace(
+        /^#{1,6} .*$/gm,
+        m => hold("hl-mark", m)
+    );
+
+    // 分割线 --- / *** / ___
+    text = text.replace(
+        /^ {0,3}([-*_])(?: *\1){2,} *$/gm,
+        m => hold("hl-hr", m)
+    );
+
+    // 引用行 >（整行）
+    text = text.replace(
+        /^ *&gt;.*$/gm,
+        m => hold("hl-quote", m)
+    );
+
+    // 列表标记（只给符号上色，内容保持原色）
+    text = text.replace(
+        /^( *)([-*+]|\d+\.)(?= )/gm,
+        (m, sp, mk) => sp + hold("hl-list", mk)
+    );
+
+    // ---- 行内标记 ----
+
+    // 图片 ![alt](url) —— 先于链接
+    text = text.replace(
+        /!\[[^\]\n]*\]\([^)\n]*\)/g,
+        m => hold("hl-link", m)
+    );
+
+    // 链接 [text](url)：文字与 URL 分别上色
+    text = text.replace(
+        /\[([^\]\n]*)\]\(([^)\n]*)\)/g,
+        (m, label, url) =>
+            "[" + hold("hl-link", label) + "](" + hold("hl-url", url) + ")"
+    );
+
+    // 加粗 **...** / __...__ —— 必须先于斜体
+    text = text.replace(
+        /\*\*[^*\n]+\*\*|__[^_\n]+__/g,
+        m => hold("hl-mark", m)
+    );
+
+    // 斜体 *...* / _..._
+    text = text.replace(
+        /\*[^*\n]+\*|(?:^|(?<=[^\w]))_[^_\n]+_(?=[^\w]|$)/g,
+        m => hold("hl-em", m)
+    );
+
+    // 删除线 ~~...~~
+    text = text.replace(
+        /~~[^~\n]+~~/g,
+        m => hold("hl-del", m)
+    );
+
+    // 还原占位符（循环处理嵌套，如标题行内含行内代码）
+    while (/\x00\d+\x00/.test(text)) {
+        text = text.replace(/\x00(\d+)\x00/g, (m, n) => parts[+n]);
+    }
+
+    hlLayer.innerHTML = text;
+}
+
+// 滚动同步：textarea 滚动时，高亮层跟随
+function syncHlScroll() {
+    hlLayer.scrollTop = editor.scrollTop;
+    hlLayer.scrollLeft = editor.scrollLeft;
+}
+
+editor.addEventListener("scroll", syncHlScroll);
+
+
+
+/*
+ 状态提示
+*/
+
+const statusTimer = {
+    id: null
+};
+
+function showStatus(msg, ms = 2000) {
+    status.innerText = msg;
+    if (statusTimer.id) {
+        clearTimeout(statusTimer.id);
+    }
+    statusTimer.id = setTimeout(() => {
+        status.innerText = "自动保存开启";
+        statusTimer.id = null;
+    }, ms);
+}
+
+
+
+/*
+ 颜色模式切换（手动选择优先于系统偏好）
+*/
+
+const themeBtn = document.getElementById("themeBtn");
+
+function applyTheme(theme) {
+    document.documentElement.classList.toggle("light", theme === "light");
+    themeBtn.innerText = theme === "light" ? "☀️" : "🌙";
+}
+
+function getPreferredTheme() {
+    const saved = localStorage.getItem("quick-editor-theme");
+    if (saved === "light" || saved === "dark") return saved;
+    return window.matchMedia("(prefers-color-scheme: light)").matches
+        ? "light"
+        : "dark";
+}
+
+function toggleTheme() {
+    const next =
+        document.documentElement.classList.contains("light")
+            ? "dark"
+            : "light";
+    localStorage.setItem("quick-editor-theme", next);
+    applyTheme(next);
+    showStatus(next === "light" ? "已切换浅色模式" : "已切换深色模式");
+}
+
+applyTheme(getPreferredTheme());
+
+// 系统主题变化时，仅当用户未手动选择才跟随
+window.matchMedia("(prefers-color-scheme: light)").addEventListener(
+    "change",
+    e => {
+        if (!localStorage.getItem("quick-editor-theme")) {
+            applyTheme(e.matches ? "light" : "dark");
+        }
+    }
+);
+
+
+
+/*
+ 初始化
+*/
+
+const saved =
+    localStorage.getItem(
+        "quick-editor-content"
+    );
+
+
+if(saved){
+
+    editor.value=saved;
+
+    renderHighlight();
+
+}
+
+
+
+/*
+ 自动保存
+*/
+
+
+editor.addEventListener(
+    "input",
+    ()=>{
+
+        localStorage.setItem(
+            "quick-editor-content",
+            editor.value
+        );
+
+
+        showStatus("已自动保存", 1000);
+
+        renderHighlight();
+
+    }
+);
+
+
+
+/*
+ Cmd + S
+*/
+
+document.addEventListener(
+    "keydown",
+    e=>{
+
+        if(
+            (e.metaKey || e.ctrlKey)
+            &&
+            e.key==="s"
+        ){
+
+            e.preventDefault();
+
+            saveText();
+
+        }
+
+    }
+);
+
+
+
+function saveText(){
+
+    localStorage.setItem(
+        "quick-editor-content",
+        editor.value
+    );
+
+
+    showStatus("保存成功");
+
+}
+
+
+
+/*
+ 复制
+*/
+
+
+async function copyText(){
+
+    await navigator.clipboard.writeText(
+        editor.value
+    );
+
+
+    showStatus("已复制");
+
+}
+
+
+
+/*
+ 清空
+*/
+
+
+function clearText(){
+
+    editor.value="";
+
+    renderHighlight();
+
+
+    localStorage.removeItem(
+        "quick-editor-content"
+    );
+
+
+    showStatus("已清空");
+
+}
+
+
+
+/*
+ 跳转到顶部
+*/
+
+
+function jumpToTop(){
+
+    if(
+        preview.style.display==="block"
+    ){
+
+        preview.scrollTop=0;
+
+    }else{
+
+        editor.setSelectionRange(0,0);
+        editor.scrollTop=0;
+        editor.focus();
+        syncHlScroll();
+
+    }
+
+
+    showStatus("已跳到顶部");
+
+}
+
+
+
+/*
+ 跳转到底部
+*/
+
+
+function jumpToBottom(){
+
+    if(
+        preview.style.display==="block"
+    ){
+
+        preview.scrollTop=preview.scrollHeight;
+
+    }else{
+
+        const len=editor.value.length;
+        editor.setSelectionRange(len,len);
+        editor.scrollTop=editor.scrollHeight;
+        editor.focus();
+        syncHlScroll();
+
+    }
+
+
+    showStatus("已跳到底部");
+
+}
+
+
+
+/*
+ 预览切换
+*/
+
+
+function togglePreview(){
+
+
+    if(
+        preview.style.display==="block"
+    ){
+
+
+        preview.style.display="none";
+
+        editor.style.display="block";
+
+        hlLayer.style.display="block";
+
+
+    }else{
+
+
+        preview.innerHTML =
+            markdown(
+                editor.value
+            );
+
+
+        preview.style.display="block";
+
+        editor.style.display="none";
+
+        hlLayer.style.display="none";
+
+
+    }
+
+
+}
+
+
+
+/*
+ Markdown 渲染
+*/
+
+
+// 行内格式：代码、图片、链接、粗体、斜体、删除线
+function inline(text){
+
+    // 先抽出行内代码，避免内容被二次解析
+    const codes = [];
+    let t = text.replace(/`([^`]+)`/g, (m, c) => {
+        codes.push(c);
+        return " C" + (codes.length - 1) + " ";
+    });
+
+    const q = s => s.replace(/"/g, "&quot;");
+
+    // 图片
+    t = t.replace(
+        /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g,
+        (m, alt, url, title) =>
+            '<img src="' + q(url) + '" alt="' + q(alt) + '"' +
+            (title ? ' title="' + q(title) + '"' : "") + ">"
+    );
+
+    // 链接
+    t = t.replace(
+        /\[([^\]]+)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g,
+        (m, label, url, title) =>
+            '<a href="' + q(url) + '"' +
+            (title ? ' title="' + q(title) + '"' : "") +
+            ' target="_blank" rel="noopener">' + label + "</a>"
+    );
+
+    // 粗体
+    t = t.replace(/\*\*([^*]+?)\*\*/g, "<strong>$1</strong>");
+    t = t.replace(
+        /(^|[^\w])__([^_]+?)__(?=[^\w]|$)/g,
+        (m, pre, c) => pre + "<strong>" + c + "</strong>"
+    );
+
+    // 斜体
+    t = t.replace(
+        /(^|[^\w])\*([^*]+?)\*(?=[^\w]|$)/g,
+        (m, pre, c) => pre + "<em>" + c + "</em>"
+    );
+    t = t.replace(
+        /(^|[^\w])_([^_]+?)_(?=[^\w]|$)/g,
+        (m, pre, c) => pre + "<em>" + c + "</em>"
+    );
+
+    // 删除线
+    t = t.replace(/~~([^~]+?)~~/g, "<del>$1</del>");
+
+    // 还原行内代码
+    t = t.replace(/ C(\d+) /g, (m, n) => "<code>" + codes[+n] + "</code>");
+
+    return t;
+}
+
+
+// 块级 + 行内渲染
+function markdown(text){
+
+    // 转义 HTML
+    let src =
+        text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+
+    const lines = src.split("\n");
+    const out = [];
+    let i = 0;
+
+    // 解析状态
+    let inCode = false;
+    let codeBuf = [];
+    let ulOpen = false;
+    let ulTask = false;
+    let olOpen = false;
+    let bqBuf = [];
+    let inBQ = false;
+    let paraBuf = [];
+
+
+    function closeLists(){
+        if(ulOpen){ out.push("</ul>"); ulOpen = false; ulTask = false; }
+        if(olOpen){ out.push("</ol>"); olOpen = false; }
+    }
+
+    function closeBlockquote(){
+        if(inBQ){
+            out.push(
+                "<blockquote>" +
+                bqBuf.map(inline).join("<br>") +
+                "</blockquote>"
+            );
+            bqBuf = [];
+            inBQ = false;
+        }
+    }
+
+    function closeParagraph(){
+        if(paraBuf.length){
+            out.push("<p>" + inline(paraBuf.join(" ")) + "</p>");
+            paraBuf = [];
+        }
+    }
+
+    function flush(){
+        closeParagraph();
+        closeLists();
+        closeBlockquote();
+    }
+
+    function splitRow(line){
+        return line
+            .trim()
+            .replace(/^\|/, "")
+            .replace(/\|$/, "")
+            .split("|")
+            .map(s => s.trim());
+    }
+
+    function alignAttr(spec){
+        if(/^:.*:$/.test(spec)) return ' style="text-align:center"';
+        if(/^:/.test(spec))    return ' style="text-align:left"';
+        if(/:$/.test(spec))    return ' style="text-align:right"';
+        return "";
+    }
+
+
+    while(i < lines.length){
+
+        const line = lines[i];
+
+        // 代码块围栏
+        const fence = line.match(/^```(.*)$/);
+        if(fence){
+            if(inCode){
+                out.push("<pre><code>" + codeBuf.join("\n") + "</code></pre>");
+                codeBuf = [];
+                inCode = false;
+            }else{
+                flush();
+                inCode = true;
+            }
+            i++;
+            continue;
+        }
+
+        if(inCode){
+            codeBuf.push(line);
+            i++;
+            continue;
+        }
+
+        // 空行：分段
+        if(/^\s*$/.test(line)){
+            flush();
+            i++;
+            continue;
+        }
+
+        // 标题
+        const h = line.match(/^(#{1,6})\s+(.+)$/);
+        if(h){
+            flush();
+            const lvl = h[1].length;
+            out.push("<h" + lvl + ">" + inline(h[2]) + "</h" + lvl + ">");
+            i++;
+            continue;
+        }
+
+        // 水平分割线
+        if(/^\s*(?:-{3,}|\*{3,}|_{3,})\s*$/.test(line)){
+            flush();
+            out.push("<hr>");
+            i++;
+            continue;
+        }
+
+        // 引用（> 已被转义为 &gt;）
+        const bq = line.match(/^&gt;\s?(.*)$/);
+        if(bq){
+            closeParagraph();
+            closeLists();
+            inBQ = true;
+            bqBuf.push(bq[1]);
+            i++;
+            continue;
+        }else if(inBQ){
+            closeBlockquote();
+        }
+
+        // 表格
+        if(
+            /^\s*\|.*\|\s*$/.test(line) &&
+            i + 1 < lines.length &&
+            /^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1])
+        ){
+            flush();
+            const header = splitRow(line);
+            const aligns = splitRow(lines[i + 1]);
+            i += 2;
+            const rows = [];
+            while(
+                i < lines.length &&
+                /^\s*\|.*\|\s*$/.test(lines[i])
+            ){
+                rows.push(splitRow(lines[i]));
+                i++;
+            }
+            let tbl = "<table><thead><tr>";
+            header.forEach((c, ci) => {
+                tbl += "<th" + alignAttr(aligns[ci] || "") + ">" + inline(c) + "</th>";
+            });
+            tbl += "</tr></thead><tbody>";
+            rows.forEach(r => {
+                tbl += "<tr>";
+                r.forEach((c, ci) => {
+                    tbl += "<td" + alignAttr(aligns[ci] || "") + ">" + inline(c) + "</td>";
+                });
+                tbl += "</tr>";
+            });
+            tbl += "</tbody></table>";
+            out.push(tbl);
+            continue;
+        }
+
+        // 任务列表
+        const task = line.match(/^\s*[-*+]\s+\[([ xX])\]\s+(.*)$/);
+        if(task){
+            closeParagraph();
+            if(olOpen){ out.push("</ol>"); olOpen = false; }
+            if(ulOpen && !ulTask){ out.push("</ul>"); ulOpen = false; }
+            if(!ulOpen){
+                out.push('<ul class="task-list">');
+                ulOpen = true;
+                ulTask = true;
+            }
+            const checked = /[xX]/.test(task[1]) ? " checked" : "";
+            out.push(
+                '<li><input type="checkbox"' + checked +
+                ' disabled> ' + inline(task[2]) + "</li>"
+            );
+            i++;
+            continue;
+        }
+
+        // 无序列表
+        const ul = line.match(/^\s*[-*+]\s+(.*)$/);
+        if(ul){
+            closeParagraph();
+            if(olOpen){ out.push("</ol>"); olOpen = false; }
+            if(ulOpen && ulTask){ out.push("</ul>"); ulOpen = false; ulTask = false; }
+            if(!ulOpen){
+                out.push("<ul>");
+                ulOpen = true;
+                ulTask = false;
+            }
+            out.push("<li>" + inline(ul[1]) + "</li>");
+            i++;
+            continue;
+        }
+
+        // 有序列表
+        const ol = line.match(/^\s*\d+\.\s+(.*)$/);
+        if(ol){
+            closeParagraph();
+            if(ulOpen){ out.push("</ul>"); ulOpen = false; ulTask = false; }
+            if(!olOpen){ out.push("<ol>"); olOpen = true; }
+            out.push("<li>" + inline(ol[1]) + "</li>");
+            i++;
+            continue;
+        }
+
+        // 普通段落
+        paraBuf.push(line.trim());
+        i++;
+    }
+
+    flush();
+
+    // 未闭合的代码块
+    if(inCode){
+        out.push("<pre><code>" + codeBuf.join("\n") + "</code></pre>");
+    }
+
+    return out.join("\n");
+}
+
+
+
+</script>
+
+
+</body>
+</html>

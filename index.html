@@ -426,31 +426,56 @@
     // Theme toggle
     const toggle = document.getElementById('themeToggle');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-    const saved = localStorage.getItem('theme');
+    const THEME_KEY = 'index-theme';
 
-    function setTheme(dark) {
-      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-      toggle.textContent = dark ? '☀️' : '🌙';
-      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    // 用户的显式选择；null 表示跟随系统
+    function getThemeChoice() {
+      const saved = localStorage.getItem(THEME_KEY);
+      return saved === 'light' || saved === 'dark' ? saved : null;
+    }
+
+    // 只应用外观，不写入 localStorage
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    function renderToggle(choice) {
+      if (choice === 'light') {
+        toggle.textContent = '☀️';
+        toggle.title = '当前：浅色模式（点击切换到深色）';
+      } else if (choice === 'dark') {
+        toggle.textContent = '🌙';
+        toggle.title = '当前：深色模式（点击切换到跟随系统）';
+      } else {
+        toggle.textContent = '🌗';
+        toggle.title = '当前：跟随系统（点击切换到浅色）';
+      }
+    }
+
+    function syncTheme() {
+      const choice = getThemeChoice();
+      applyTheme(choice || (prefersDark.matches ? 'dark' : 'light'));
+      renderToggle(choice);
     }
 
     // Init theme
-    if (saved) {
-      setTheme(saved === 'dark');
-    } else {
-      setTheme(prefersDark.matches);
-    }
+    syncTheme();
 
+    // 浅色 → 深色 → 跟随系统
     toggle.addEventListener('click', () => {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      setTheme(!isDark);
+      const choice = getThemeChoice();
+      const next = choice === null ? 'light' : choice === 'light' ? 'dark' : null;
+      if (next === null) {
+        localStorage.removeItem(THEME_KEY);
+      } else {
+        localStorage.setItem(THEME_KEY, next);
+      }
+      syncTheme();
     });
 
     // Keep in sync with OS preference
-    prefersDark.addEventListener('change', (e) => {
-      if (!localStorage.getItem('theme')) {
-        setTheme(e.matches);
-      }
+    prefersDark.addEventListener('change', () => {
+      if (getThemeChoice() === null) syncTheme();
     });
   </script>
 </body>

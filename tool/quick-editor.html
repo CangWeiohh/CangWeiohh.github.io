@@ -255,6 +255,14 @@ textarea {
 
     overflow:auto;
 
+    white-space:pre-wrap;
+
+    word-break:normal;
+
+    overflow-wrap:break-word;
+
+    tab-size:4;
+
 }
 
 textarea::selection {
@@ -280,7 +288,11 @@ textarea::selection {
 
     white-space:pre-wrap;
 
-    word-break:break-all;
+    word-break:normal;
+
+    overflow-wrap:break-word;
+
+    tab-size:4;
 
     font-size:14px;
 
@@ -295,6 +307,8 @@ textarea::selection {
     color: var(--editor-fg);
 
     margin:0;
+
+    border:0;
 
 }
 
@@ -752,7 +766,13 @@ function renderHighlight() {
         text = text.replace(/\x00(\d+)\x00/g, (m, n) => parts[+n]);
     }
 
-    hlLayer.innerHTML = text;
+    /*
+     textarea 会为末尾换行保留一行，而 pre-wrap 的容器会吞掉它。
+     补一个换行让两层行数一致，否则末尾换行时高度差一行、光标错位。
+    */
+    hlLayer.innerHTML = text + "\n";
+
+    syncHlSize();
 }
 
 // 滚动同步：textarea 滚动时，高亮层跟随
@@ -762,6 +782,24 @@ function syncHlScroll() {
 }
 
 editor.addEventListener("scroll", syncHlScroll);
+
+
+/*
+ 尺寸同步：textarea 出现纵向滚动条时可用文字宽度变窄，
+ 高亮层若仍是满宽，换行点就会与 textarea 不一致、光标错位。
+ 用 ResizeObserver 而非 resize 事件：窗口缩放、容器变化、
+ 切换预览、滚动条出现都会触发，覆盖所有宽度变化来源。
+*/
+
+function syncHlSize() {
+    hlLayer.style.width = editor.clientWidth + "px";
+    hlLayer.style.height = editor.clientHeight + "px";
+}
+
+new ResizeObserver(() => {
+    syncHlSize();
+    syncHlScroll();
+}).observe(editor);
 
 
 
@@ -787,45 +825,68 @@ function showStatus(msg, ms = 2000) {
 
 
 /*
- 颜色模式切换（手动选择优先于系统偏好）
+ 颜色模式切换（浅色 / 深色 / 跟随系统三态循环）
 */
 
 const themeBtn = document.getElementById("themeBtn");
+const THEME_KEY = "quick-editor-theme";
+const lightQuery = window.matchMedia("(prefers-color-scheme: light)");
 
+// 用户的显式选择；null 表示跟随系统
+function getThemeChoice() {
+    const saved = localStorage.getItem(THEME_KEY);
+    return saved === "light" || saved === "dark" ? saved : null;
+}
+
+// 只应用外观，不写入 localStorage
 function applyTheme(theme) {
     document.documentElement.classList.toggle("light", theme === "light");
-    themeBtn.innerText = theme === "light" ? "☀️" : "🌙";
 }
 
-function getPreferredTheme() {
-    const saved = localStorage.getItem("quick-editor-theme");
-    if (saved === "light" || saved === "dark") return saved;
-    return window.matchMedia("(prefers-color-scheme: light)").matches
-        ? "light"
-        : "dark";
-}
-
-function toggleTheme() {
-    const next =
-        document.documentElement.classList.contains("light")
-            ? "dark"
-            : "light";
-    localStorage.setItem("quick-editor-theme", next);
-    applyTheme(next);
-    showStatus(next === "light" ? "已切换浅色模式" : "已切换深色模式");
-}
-
-applyTheme(getPreferredTheme());
-
-// 系统主题变化时，仅当用户未手动选择才跟随
-window.matchMedia("(prefers-color-scheme: light)").addEventListener(
-    "change",
-    e => {
-        if (!localStorage.getItem("quick-editor-theme")) {
-            applyTheme(e.matches ? "light" : "dark");
-        }
+function renderThemeBtn(choice) {
+    if (choice === "light") {
+        themeBtn.innerText = "☀️";
+        themeBtn.title = "当前：浅色模式（点击切换到深色）";
+    } else if (choice === "dark") {
+        themeBtn.innerText = "🌙";
+        themeBtn.title = "当前：深色模式（点击切换到跟随系统）";
+    } else {
+        themeBtn.innerText = "🌗";
+        themeBtn.title = "当前：跟随系统（点击切换到浅色）";
     }
-);
+}
+
+function syncTheme() {
+    const choice = getThemeChoice();
+    applyTheme(choice || (lightQuery.matches ? "light" : "dark"));
+    renderThemeBtn(choice);
+}
+
+// 浅色 → 深色 → 跟随系统
+function toggleTheme() {
+    const choice = getThemeChoice();
+    const next = choice === null ? "light" : choice === "light" ? "dark" : null;
+    if (next === null) {
+        localStorage.removeItem(THEME_KEY);
+    } else {
+        localStorage.setItem(THEME_KEY, next);
+    }
+    syncTheme();
+    showStatus(
+        next === "light"
+            ? "已切换浅色模式"
+            : next === "dark"
+              ? "已切换深色模式"
+              : "已切换跟随系统"
+    );
+}
+
+syncTheme();
+
+// 未手动选择时，跟随系统实时变化
+lightQuery.addEventListener("change", () => {
+    if (getThemeChoice() === null) syncTheme();
+});
 
 
 
@@ -1030,6 +1091,11 @@ function togglePreview(){
         editor.style.display="block";
 
         hlLayer.style.display="block";
+
+        // 隐藏期间 clientWidth 为 0，恢复后立即重量，避免残留旧尺寸
+        syncHlSize();
+
+        syncHlScroll();
 
 
     }else{

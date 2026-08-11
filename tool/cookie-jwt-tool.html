@@ -894,29 +894,58 @@ function b64UrlEncode(str) {
 }
 
 /* ========== 深色模式 ========== */
-function getPreferredTheme() {
-  const saved = localStorage.getItem('theme');
-  if (saved) return saved;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+const THEME_KEY = 'cookie-jwt-tool-theme';
+const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+// 用户的显式选择；null 表示跟随系统
+function getThemeChoice() {
+  const saved = localStorage.getItem(THEME_KEY);
+  return saved === 'light' || saved === 'dark' ? saved : null;
 }
 
+// 只应用外观，不写入 localStorage
 function applyTheme(theme) {
   document.documentElement.classList.toggle('dark', theme === 'dark');
-  const btn = document.getElementById('themeToggle');
-  if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-  localStorage.setItem('theme', theme);
 }
 
+function renderThemeBtn(choice) {
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  if (choice === 'light') {
+    btn.textContent = '☀️';
+    btn.title = '当前：浅色模式（点击切换到深色）';
+  } else if (choice === 'dark') {
+    btn.textContent = '🌙';
+    btn.title = '当前：深色模式（点击切换到跟随系统）';
+  } else {
+    btn.textContent = '🌗';
+    btn.title = '当前：跟随系统（点击切换到浅色）';
+  }
+}
+
+function syncTheme() {
+  const choice = getThemeChoice();
+  applyTheme(choice || (darkQuery.matches ? 'dark' : 'light'));
+  renderThemeBtn(choice);
+}
+
+// 浅色 → 深色 → 跟随系统
 function toggleTheme() {
-  const isDark = document.documentElement.classList.contains('dark');
-  applyTheme(isDark ? 'light' : 'dark');
+  const choice = getThemeChoice();
+  const next = choice === null ? 'light' : choice === 'light' ? 'dark' : null;
+  if (next === null) {
+    localStorage.removeItem(THEME_KEY);
+  } else {
+    localStorage.setItem(THEME_KEY, next);
+  }
+  syncTheme();
 }
 
 // 初始化主题
-applyTheme(getPreferredTheme());
-// 监听系统主题变化
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-  if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'dark' : 'light');
+syncTheme();
+// 未手动选择时，跟随系统实时变化
+darkQuery.addEventListener('change', () => {
+  if (getThemeChoice() === null) syncTheme();
 });
 </script>
 </body>

@@ -429,23 +429,31 @@ function flattenJwt(obj, prefix) {
   return result;
 }
 
-// 时间戳字段列表（秒级）
+// 已知时间戳字段名：这些字段无论值大小都会转换，并显示过期/生效状态
 const JWT_TIME_FIELDS = new Set(['iat', 'exp', 'nbf', 'auth_time', 'updated_at', 'created_at']);
+// 值形状检测的时间范围（2000-01-01 ~ 2100-01-01），未知字段名仅当值落在范围内才转换，
+// 避免手机号、订单号、ID 等数字被误判为时间戳
+const TS_MIN_MS = Date.UTC(2000, 0, 1);
+const TS_MAX_MS = Date.UTC(2100, 0, 1);
 
 function formatJwtTime(key, val) {
-  if (!JWT_TIME_FIELDS.has(key)) return null;
+  // 兼容嵌套路径（如 metadata.exp）：取最后一段匹配字段名
+  const leaf = String(key).split('.').pop();
+  const known = JWT_TIME_FIELDS.has(leaf);
   const ts = Number(val);
   if (!Number.isFinite(ts)) return null;
   // 判断是秒还是毫秒
   const ms = ts > 1e12 ? ts : ts * 1000;
   const d = new Date(ms);
   if (isNaN(d.getTime())) return null;
+  // 未知字段名：值不在合理时间范围内则不提示
+  if (!known && (ms < TS_MIN_MS || ms > TS_MAX_MS)) return null;
   const str = d.toLocaleString('zh-CN', { hour12: false });
   const now = Date.now();
   let status = '';
-  if (key === 'exp') {
+  if (leaf === 'exp' || /expir/i.test(leaf)) {
     status = ms < now ? ' <span class="jwt-expired">⚠ 已过期</span>' : ' <span class="jwt-valid">✓ 未过期</span>';
-  } else if (key === 'nbf') {
+  } else if (leaf === 'nbf') {
     status = ms > now ? ' <span class="jwt-expired">⚠ 尚未生效</span>' : ' <span class="jwt-valid">✓ 已生效</span>';
   }
   return `<span class="jwt-time">→ <span class="ts">${str}</span>${status}</span>`;

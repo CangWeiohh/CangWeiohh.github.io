@@ -229,6 +229,7 @@
     <div class="tab" data-view="diff">Cookie 对比</div>
     <div class="tab" data-view="jwt">JWT 解析</div>
     <div class="tab" data-view="jwt-diff">JWT 对比</div>
+    <div class="tab" data-view="ts">时间戳转换</div>
   </div>
 
   <!-- ============ Cookie 解析视图 ============ -->
@@ -325,6 +326,46 @@
     <div class="panel" style="margin-top:8px;">
       <div class="stat-row" id="jwtDiffStats"></div>
       <div id="jwtDiffResult"><div class="empty">输入 A / B 后点击「对比」。</div></div>
+    </div>
+  </section>
+
+  <!-- ============ 时间戳转换视图 ============ -->
+  <section id="view-ts" style="display:none;">
+    <div class="grid">
+      <div class="panel">
+        <h2>时间戳 → 时间 <span class="badge">秒 / 毫秒 / 微秒</span></h2>
+        <textarea id="tsInput" placeholder="粘贴时间戳，支持多行，例如：&#10;1786956824&#10;1786956824444&#10;1786956824444000"></textarea>
+        <div class="toolbar">
+          <label class="inline">单位 <select id="tsUnit">
+            <option value="auto">自动检测</option>
+            <option value="s">秒</option>
+            <option value="ms">毫秒</option>
+            <option value="us">微秒</option>
+          </select></label>
+          <button class="primary" onclick="doTsToTime()">转换</button>
+          <button onclick="loadTsSample()">示例</button>
+          <button onclick="insertNowTs()">插入当前时间戳</button>
+          <button onclick="document.getElementById('tsInput').value='';doTsToTime()">清空</button>
+          <div class="spacer"></div>
+          <button onclick="copyTsToTime()">复制结果</button>
+        </div>
+        <div class="err" id="tsToTimeErr"></div>
+        <div id="tsToTimeResult"><div class="empty">输入时间戳后点击「转换」。</div></div>
+      </div>
+      <div class="panel">
+        <h2>时间 → 时间戳 <span class="badge">本地时间</span></h2>
+        <textarea id="timeInput" placeholder="粘贴时间字符串，支持多行，例如：&#10;2026/8/19 20:53:44&#10;2026-8-19 20:53&#10;2026/08/19T20:53:44Z"></textarea>
+        <div class="toolbar">
+          <button class="primary" onclick="doTimeToTs()">转换</button>
+          <button onclick="loadTimeSample()">示例</button>
+          <button onclick="insertNowTime()">插入当前时间</button>
+          <button onclick="document.getElementById('timeInput').value='';doTimeToTs()">清空</button>
+          <div class="spacer"></div>
+          <button onclick="copyTimeToTs()">复制结果</button>
+        </div>
+        <div class="err" id="timeToTsErr"></div>
+        <div id="timeToTsResult"><div class="empty">输入时间后点击「转换」。</div></div>
+      </div>
     </div>
   </section>
 </main>
@@ -480,7 +521,7 @@ function formatJwtTime(key, val) {
 }
 
 /* ========== 视图切换 ========== */
-const VIEWS = ['parse', 'diff', 'jwt', 'jwt-diff'];
+const VIEWS = ['parse', 'diff', 'jwt', 'jwt-diff', 'ts'];
 document.querySelectorAll('.tab').forEach(t => {
   t.onclick = () => {
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
@@ -1101,6 +1142,189 @@ function swapJwtAB() {
   const b = document.getElementById('jwtInputB');
   [a.value, b.value] = [b.value, a.value];
   doJwtDiff();
+}
+
+/* ========== 时间戳转换视图 ========== */
+const TS_UNIT_LABEL = { s: '秒', ms: '毫秒', us: '微秒' };
+
+function pad2(n) { return String(n).padStart(2, '0'); }
+
+// 目标格式：2026/8/19 20:53:44（月、日不补零，时分秒补零）
+function formatDateTime(d) {
+  return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()} ${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
+}
+
+// 自动检测单位：值 >= 1e15 视为微秒，>= 1e12 视为毫秒，其余视为秒
+function detectTsUnit(ts) {
+  const abs = Math.abs(ts);
+  if (abs >= 1e15) return 'us';
+  if (abs >= 1e12) return 'ms';
+  return 's';
+}
+
+function tsToDate(ts, unit) {
+  const u = unit || detectTsUnit(ts);
+  const mult = u === 's' ? 1000 : u === 'ms' ? 1 : 0.001;
+  return new Date(ts * mult);
+}
+
+function doTsToTime() {
+  const text = document.getElementById('tsInput').value;
+  const unit = document.getElementById('tsUnit').value;
+  const err = document.getElementById('tsToTimeErr');
+  err.textContent = '';
+  const out = document.getElementById('tsToTimeResult');
+  if (!text.trim()) {
+    out.innerHTML = '<div class="empty">输入时间戳后点击「转换」。</div>';
+    return;
+  }
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const rows = [], bad = [];
+  for (const line of lines) {
+    const ts = Number(line);
+    if (!Number.isFinite(ts)) { bad.push(line); continue; }
+    const u = unit === 'auto' ? detectTsUnit(ts) : unit;
+    const d = tsToDate(ts, u);
+    if (isNaN(d.getTime())) { bad.push(line); continue; }
+    rows.push({ ts: line, u, d });
+  }
+  if (!rows.length) {
+    out.innerHTML = '<div class="empty">没有可转换的时间戳。</div>';
+  } else {
+    let html = '<table><thead><tr><th style="width:36%">时间戳</th><th style="width:70px">单位</th><th>时间</th></tr></thead><tbody>';
+    for (const r of rows) {
+      const utc = new Date(r.d.getTime() + r.d.getTimezoneOffset() * 60000);
+      html += `<tr><td class="name">${esc(r.ts)}</td><td>${esc(TS_UNIT_LABEL[r.u])}</td>`
+        + `<td class="val">${esc(formatDateTime(r.d))}<div class="hint" style="margin-top:2px;">UTC ${esc(formatDateTime(utc))}</div></td></tr>`;
+    }
+    html += '</tbody></table>';
+    out.innerHTML = html;
+  }
+  if (bad.length) {
+    err.textContent = `${bad.length} 行无法解析（已忽略）：${bad.slice(0, 3).map(esc).join('；')}`;
+  }
+}
+
+// 解析常见时间字符串（本地时间；支持 Z / UTC / ±HH:MM 时区后缀），失败返回 null
+function parseTimeStr(str) {
+  const s = String(str).trim();
+  if (!s) return null;
+  let utc = false, offsetMin = 0, body = s;
+  if (/Z$/i.test(body)) {
+    utc = true;
+    body = body.replace(/Z$/i, '').trim();
+  } else if (/ UTC$/i.test(body)) {
+    utc = true;
+    body = body.replace(/ UTC$/i, '').trim();
+  } else {
+    const tzm = body.match(/([+-])(\d{1,2}):?(\d{2})?\s*$/);
+    if (tzm) {
+      const sign = tzm[1] === '-' ? -1 : 1;
+      offsetMin = sign * (Number(tzm[2]) * 60 + Number(tzm[3] || 0));
+      utc = true;
+      body = body.slice(0, tzm.index).trim();
+    }
+  }
+  const m = body.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})(?:[ T](\d{1,2}):(\d{1,2})(?::(\d{1,2}))?(?:\.(\d{1,9}))?)?$/);
+  if (!m) return null;
+  const y = +m[1], mo = +m[2], d = +m[3], h = +(m[4] || 0), mi = +(m[5] || 0), ss = +(m[6] || 0);
+  const frac = (m[7] || '').padEnd(3, '0').slice(0, 3);
+  const ms = frac ? +frac : 0;
+  let t;
+  if (utc) {
+    // 先构造未偏移的 UTC 时刻校验溢出，再应用时区偏移得到真正的时刻
+    const raw = new Date(Date.UTC(y, mo - 1, d, h, mi, ss, ms));
+    if (isNaN(raw.getTime())) return null;
+    const g = [raw.getUTCFullYear(), raw.getUTCMonth() + 1, raw.getUTCDate(), raw.getUTCHours(), raw.getUTCMinutes(), raw.getUTCSeconds()];
+    if (g[0] !== y || g[1] !== mo || g[2] !== d || g[3] !== h || g[4] !== mi || g[5] !== ss) return null;
+    t = new Date(raw.getTime() - offsetMin * 60000);
+  } else {
+    t = new Date(y, mo - 1, d, h, mi, ss, ms);
+    if (isNaN(t.getTime())) return null;
+    // 溢出校验：new Date 会把 2026/13/99 99:99 这类越界值进位成合法日期，需回读组件确认一致
+    const g = [t.getFullYear(), t.getMonth() + 1, t.getDate(), t.getHours(), t.getMinutes(), t.getSeconds()];
+    if (g[0] !== y || g[1] !== mo || g[2] !== d || g[3] !== h || g[4] !== mi || g[5] !== ss) return null;
+  }
+  return t;
+}
+
+function doTimeToTs() {
+  const text = document.getElementById('timeInput').value;
+  const err = document.getElementById('timeToTsErr');
+  err.textContent = '';
+  const out = document.getElementById('timeToTsResult');
+  if (!text.trim()) {
+    out.innerHTML = '<div class="empty">输入时间后点击「转换」。</div>';
+    return;
+  }
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const rows = [], bad = [];
+  for (const line of lines) {
+    const t = parseTimeStr(line);
+    if (!t) { bad.push(line); continue; }
+    rows.push({ in: line, s: Math.floor(t.getTime() / 1000), ms: t.getTime(), us: Math.floor(t.getTime() * 1000) });
+  }
+  if (!rows.length) {
+    out.innerHTML = '<div class="empty">没有可转换的时间。</div>';
+  } else {
+    let html = '<table><thead><tr><th style="width:30%">时间</th><th>秒</th><th>毫秒</th><th>微秒</th></tr></thead><tbody>';
+    for (const r of rows) {
+      html += `<tr><td class="name">${esc(r.in)}</td><td class="val">${r.s}</td><td class="val">${r.ms}</td><td class="val">${r.us}</td></tr>`;
+    }
+    html += '</tbody></table>';
+    out.innerHTML = html;
+  }
+  if (bad.length) {
+    err.textContent = `${bad.length} 行无法解析（已忽略）：${bad.slice(0, 3).map(esc).join('；')}`;
+  }
+}
+
+function insertNowTs() {
+  const now = Date.now();
+  document.getElementById('tsInput').value = `${Math.floor(now / 1000)}\n${now}\n${now * 1000}`;
+  doTsToTime();
+}
+
+function insertNowTime() {
+  document.getElementById('timeInput').value = formatDateTime(new Date());
+  doTimeToTs();
+}
+
+function loadTsSample() {
+  insertNowTs();
+}
+
+function loadTimeSample() {
+  document.getElementById('timeInput').value = '2026/8/19 20:53:44\n2026-8-19 20:53\n2026/08/19T20:53:44Z';
+  doTimeToTs();
+}
+
+function copyTsToTime() {
+  const table = document.querySelector('#tsToTimeResult table');
+  if (!table) return;
+  const lines = [];
+  table.querySelectorAll('tbody tr').forEach(tr => {
+    lines.push(Array.from(tr.children).map(td => td.textContent.trim()).join('\t'));
+  });
+  navigator.clipboard.writeText(lines.join('\n')).then(() => {
+    const err = document.getElementById('tsToTimeErr');
+    err.style.color = '#17803d'; err.textContent = '已复制到剪贴板。';
+    setTimeout(() => { err.textContent = ''; err.style.color = ''; }, 1500);
+  });
+}
+
+function copyTimeToTs() {
+  const table = document.querySelector('#timeToTsResult table');
+  if (!table) return;
+  const lines = [];
+  table.querySelectorAll('tbody tr').forEach(tr => {
+    lines.push(Array.from(tr.children).map(td => td.textContent.trim()).join('\t'));
+  });
+  navigator.clipboard.writeText(lines.join('\n')).then(() => {
+    const err = document.getElementById('timeToTsErr');
+    err.style.color = '#17803d'; err.textContent = '已复制到剪贴板。';
+    setTimeout(() => { err.textContent = ''; err.style.color = ''; }, 1500);
+  });
 }
 
 /* ========== 示例数据 ========== */

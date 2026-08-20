@@ -263,6 +263,20 @@ textarea {
 
     tab-size:4;
 
+    /*
+     WebKit 字宽稳定化：窄窗口下 Safari 的文字自动放大只作用于部分元素，
+     连字/字距调整在 textarea 与 pre 之间也可能不一致，误差会沿行累积。
+     两层必须完全相同。
+    */
+
+    -webkit-text-size-adjust:100%;
+
+    text-size-adjust:100%;
+
+    font-kerning:none;
+
+    font-variant-ligatures:none;
+
 }
 
 textarea::selection {
@@ -309,6 +323,16 @@ textarea::selection {
     margin:0;
 
     border:0;
+
+    /* 与 textarea 保持一致，见上方说明 */
+
+    -webkit-text-size-adjust:100%;
+
+    text-size-adjust:100%;
+
+    font-kerning:none;
+
+    font-variant-ligatures:none;
 
 }
 

@@ -112,26 +112,28 @@ button:focus-visible, .item:focus-visible {
 .brand-title { font-size: 15px; font-weight: 700; letter-spacing: .02em; }
 .brand-subtitle { color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
 
-.header-actions { display: flex; align-items: center; gap: 10px; }
+.header-actions { display: flex; align-items: center; gap: 8px; }
 
 button {
   border: 1px solid transparent;
-  border-radius: 11px;
-  padding: 10px 15px;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 1.2;
   cursor: pointer;
   color: var(--text);
   background: var(--panel-soft);
   transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 
-button:hover { transform: translateY(-1px); background: var(--button-hover); border-color: var(--line); box-shadow: 0 5px 14px rgba(60, 60, 67, .08); }
-button:active { transform: translateY(0); }
+button:hover { transform: translateY(-1px); background: var(--button-hover); border-color: var(--line); box-shadow: 0 3px 8px rgba(60, 60, 67, .1); }
+button:active { transform: translateY(0); box-shadow: none; }
 
-.button-primary { display: inline-flex; align-items: center; gap: 8px; color: #ffffff; background: var(--accent); box-shadow: 0 8px 20px rgba(10, 132, 255, .2); }
-.button-primary:hover { color: #ffffff; background: #0077ed; border-color: transparent; }
-.button-danger { color: var(--danger); background: rgba(255, 69, 58, .09); border-color: rgba(255, 69, 58, .2); }
-.button-danger:hover { background: rgba(255, 69, 58, .16); border-color: rgba(255, 69, 58, .34); }
-.icon-button { width: 40px; height: 40px; padding: 0; display: grid; place-items: center; }
+.button-primary { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, transparent); border-color: color-mix(in srgb, var(--accent) 22%, transparent); }
+.button-primary:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, transparent); border-color: color-mix(in srgb, var(--accent) 34%, transparent); box-shadow: 0 3px 8px color-mix(in srgb, var(--accent) 14%, transparent); }
+.button-danger { color: var(--danger); background: rgba(255, 69, 58, .08); border-color: rgba(255, 69, 58, .16); }
+.button-danger:hover { background: rgba(255, 69, 58, .14); border-color: rgba(255, 69, 58, .28); box-shadow: 0 3px 8px rgba(255, 69, 58, .14); }
+.icon-button { width: 32px; height: 32px; padding: 0; display: grid; place-items: center; }
 
 .layout { min-height: 0; flex: 1; display: flex; }
 

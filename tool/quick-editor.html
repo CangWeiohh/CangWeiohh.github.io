@@ -243,6 +243,12 @@ textarea {
 
     line-height:1.6;
 
+    font-weight:400;
+
+    font-style:normal;
+
+    letter-spacing:0;
+
     font-family:
         Menlo,
         Monaco,
@@ -259,7 +265,7 @@ textarea {
 
     word-break:normal;
 
-    overflow-wrap:break-word;
+    overflow-wrap:anywhere;
 
     tab-size:4;
 
@@ -277,6 +283,8 @@ textarea {
 
     font-variant-ligatures:none;
 
+    font-synthesis:none;
+
 }
 
 textarea::selection {
@@ -292,7 +300,7 @@ textarea::selection {
 
     position:absolute;
 
-    inset:0;
+    inset:0 auto auto 0;
 
     padding:15px;
 
@@ -304,13 +312,19 @@ textarea::selection {
 
     word-break:normal;
 
-    overflow-wrap:break-word;
+    overflow-wrap:anywhere;
 
     tab-size:4;
 
     font-size:14px;
 
     line-height:1.6;
+
+    font-weight:400;
+
+    font-style:normal;
+
+    letter-spacing:0;
 
     font-family:
         Menlo,
@@ -334,6 +348,8 @@ textarea::selection {
 
     font-variant-ligatures:none;
 
+    font-synthesis:none;
+
 }
 
 .hl-layer .hl-code {
@@ -346,7 +362,8 @@ textarea::selection {
 
     color: var(--hl-mark);
 
-    font-weight:700;
+    /* 高亮层不能改变字形宽度，否则会与透明 textarea 的光标错位。 */
+    font-weight:400;
 
 }
 
@@ -354,7 +371,8 @@ textarea::selection {
 
     color: var(--hl-em);
 
-    font-style:italic;
+    /* 路径中的下划线可能被识别为斜体，必须保持原始字宽。 */
+    font-style:normal;
 
 }
 
@@ -376,7 +394,7 @@ textarea::selection {
 
     color: var(--hl-quote);
 
-    font-style:italic;
+    font-style:normal;
 
 }
 
@@ -797,6 +815,11 @@ function renderHighlight() {
     hlLayer.innerHTML = text + "\n";
 
     syncHlSize();
+    syncHlScroll();
+    requestAnimationFrame(() => {
+        syncHlSize();
+        syncHlScroll();
+    });
 }
 
 // 滚动同步：textarea 滚动时，高亮层跟随

@@ -1,1119 +1,516 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
 <meta charset="UTF-8">
-<title>Log Viewer</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log Viewer · 日志工作台</title>
 <style>
-
-*{
-    box-sizing:border-box;
+/* 默认深色模式；浅色模式通过 .light 覆盖变量 */
+:root {
+  --bg: #1c1c1e;
+  --page-gradient: radial-gradient(circle at 5% -15%, rgba(10, 132, 255, .16), transparent 34%), radial-gradient(circle at 100% 0%, rgba(94, 92, 230, .14), transparent 30%), linear-gradient(135deg, #1c1c1e 0%, #202124 52%, #151516 100%);
+  --panel: rgba(44, 44, 46, .82);
+  --panel-strong: #2c2c2e;
+  --panel-soft: rgba(58, 58, 60, .72);
+  --header-bg: rgba(28, 28, 30, .76);
+  --sidebar-bg: rgba(28, 28, 30, .64);
+  --item-bg: rgba(58, 58, 60, .68);
+  --item-hover: rgba(72, 72, 74, .9);
+  --item-active: linear-gradient(100deg, rgba(10, 132, 255, .18), rgba(94, 92, 230, .12));
+  --status-bg: rgba(44, 44, 46, .78);
+  --log-bg: rgba(28, 28, 30, .76);
+  --log-header-bg: rgba(44, 44, 46, .86);
+  --log-fg: #e5e5ea;
+  --line: rgba(235, 235, 245, .16);
+  --text: #f5f5f7;
+  --muted: #98989d;
+  --subtle: #8e8e93;
+  --accent: #0a84ff;
+  --accent-2: #5e5ce6;
+  --danger: #ff453a;
+  --button-hover: rgba(72, 72, 74, .9);
+  --shadow: 0 18px 45px rgba(0, 0, 0, .28);
+  --scrollbar: rgba(174, 174, 178, .28);
+  --scrollbar-hover: rgba(174, 174, 178, .46);
+  --empty-border: rgba(10, 132, 255, .28);
+  --empty-bg: rgba(10, 132, 255, .12);
+  --brand-border: rgba(10, 132, 255, .4);
+  --brand-bg: linear-gradient(145deg, rgba(10,132,255,.18), rgba(94,92,230,.16));
+  --brand-shadow: inset 0 1px rgba(255,255,255,.16), 0 8px 25px rgba(10,132,255,.14);
 }
 
-body{
-    margin:0;
-    height:100vh;
-    background:#0f172a;
-    color:#e5e7eb;
-    font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SFMono-Regular",
-    monospace;
+:root.light {
+  --bg: #f5f5f7;
+  --page-gradient: radial-gradient(circle at 5% -15%, rgba(0, 122, 255, .13), transparent 34%), radial-gradient(circle at 100% 0%, rgba(88, 86, 214, .10), transparent 30%), linear-gradient(135deg, #f5f5f7 0%, #eef3f9 52%, #f8f8fa 100%);
+  --panel: rgba(255, 255, 255, .82);
+  --panel-strong: #ffffff;
+  --panel-soft: rgba(255, 255, 255, .72);
+  --header-bg: rgba(255, 255, 255, .72);
+  --sidebar-bg: rgba(255, 255, 255, .62);
+  --item-bg: rgba(255, 255, 255, .7);
+  --item-hover: rgba(255, 255, 255, .96);
+  --item-active: linear-gradient(100deg, rgba(0,122,255,.1), rgba(88,86,214,.06));
+  --status-bg: rgba(255, 255, 255, .76);
+  --log-bg: rgba(255, 255, 255, .74);
+  --log-header-bg: rgba(242, 242, 247, .9);
+  --log-fg: #3a3a3c;
+  --line: rgba(60, 60, 67, .16);
+  --text: #1d1d1f;
+  --muted: #6e6e73;
+  --subtle: #8e8e93;
+  --accent: #007aff;
+  --accent-2: #5856d6;
+  --danger: #ff3b30;
+  --button-hover: rgba(255, 255, 255, .96);
+  --shadow: 0 18px 45px rgba(60, 60, 67, .12);
+  --scrollbar: rgba(60, 60, 67, .18);
+  --scrollbar-hover: rgba(60, 60, 67, .3);
+  --empty-border: rgba(0,122,255,.2);
+  --empty-bg: rgba(0,122,255,.07);
+  --brand-border: rgba(0, 122, 255, .24);
+  --brand-bg: linear-gradient(145deg, rgba(0,122,255,.11), rgba(88,86,214,.09));
+  --brand-shadow: inset 0 1px rgba(255,255,255,.9), 0 8px 25px rgba(0,122,255,.10);
 }
 
+* { box-sizing: border-box; }
 
-.header{
+html, body { margin: 0; min-height: 100%; }
 
-    height:60px;
-
-    display:flex;
-
-    align-items:center;
-
-    padding:0 20px;
-
-    background:#111827;
-
-    border-bottom:1px solid #334155;
-
+body {
+  height: 100vh;
+  overflow: hidden;
+  color: var(--text);
+  background: var(--page-gradient);
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
 }
 
+button { font: inherit; }
 
-.logo{
-
-    font-size:18px;
-
-    font-weight:600;
-
-    margin-right:auto;
-
+button:focus-visible, .item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
+.app-shell { height: 100vh; display: flex; flex-direction: column; }
 
-
-button{
-
-    border:0;
-
-    padding:8px 16px;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-    color:white;
-
-    background:#2563eb;
-
-    margin-left:10px;
-
+.header {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 28px;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(24px);
+  position: relative;
+  z-index: 2;
 }
 
+.brand { display: flex; align-items: center; gap: 12px; margin-right: auto; min-width: 210px; }
 
-
-button:hover{
-
-    opacity:.85;
-
+.brand-mark {
+  width: 38px; height: 38px; display: grid; place-items: center;
+  border: 1px solid var(--brand-border); border-radius: 12px;
+  color: var(--accent); background: var(--brand-bg);
+  box-shadow: var(--brand-shadow);
 }
 
+.brand-copy { display: flex; flex-direction: column; gap: 2px; }
+.brand-title { font-size: 15px; font-weight: 700; letter-spacing: .02em; }
+.brand-subtitle { color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
 
+.header-actions { display: flex; align-items: center; gap: 10px; }
 
-button.danger{
-
-    background:#dc2626;
-
+button {
+  border: 1px solid transparent;
+  border-radius: 11px;
+  padding: 10px 15px;
+  cursor: pointer;
+  color: var(--text);
+  background: var(--panel-soft);
+  transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 
+button:hover { transform: translateY(-1px); background: var(--button-hover); border-color: var(--line); box-shadow: 0 5px 14px rgba(60, 60, 67, .08); }
+button:active { transform: translateY(0); }
 
+.button-primary { display: inline-flex; align-items: center; gap: 8px; color: #ffffff; background: var(--accent); box-shadow: 0 8px 20px rgba(10, 132, 255, .2); }
+.button-primary:hover { color: #ffffff; background: #0077ed; border-color: transparent; }
+.button-danger { color: var(--danger); background: rgba(255, 69, 58, .09); border-color: rgba(255, 69, 58, .2); }
+.button-danger:hover { background: rgba(255, 69, 58, .16); border-color: rgba(255, 69, 58, .34); }
+.icon-button { width: 40px; height: 40px; padding: 0; display: grid; place-items: center; }
 
-.layout{
+.layout { min-height: 0; flex: 1; display: flex; }
 
-    height:calc(100vh - 60px);
-
-    display:flex;
-
+.sidebar {
+  width: 198px;
+  flex: 0 0 198px;
+  padding: 24px 16px 18px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--line);
+  overflow: auto;
+  transition: width .28s ease, flex-basis .28s ease, padding .28s ease, opacity .2s ease;
 }
 
+.sidebar.hide { width: 0; flex-basis: 0; padding-left: 0; padding-right: 0; opacity: 0; overflow: hidden; border-right: 0; }
 
+.sidebar-heading { display: flex; align-items: center; justify-content: space-between; padding: 0 10px 14px; }
+.sidebar-title { color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.history-count { min-width: 22px; padding: 3px 7px; border-radius: 99px; color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); font-size: 11px; text-align: center; }
+.history { display: flex; flex-direction: column; gap: 8px; }
 
-.sidebar{
-
-    width:280px;
-
-    background:#111827;
-
-    border-right:1px solid #334155;
-
-    padding:15px;
-
-    overflow:auto;
-
-    transition:.25s;
-
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 32px 12px 12px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  color: var(--text);
+  background: var(--item-bg);
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
 }
+.item::before { content: ""; width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: var(--subtle); box-shadow: 0 0 0 4px color-mix(in srgb, var(--subtle) 12%, transparent); }
+.item:hover { background: var(--item-hover); border-color: var(--line); transform: translateX(2px); }
+.item.active { background: var(--item-active); border-color: color-mix(in srgb, var(--accent) 38%, transparent); }
+.item.active::before { background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent), 0 0 14px color-mix(in srgb, var(--accent) 45%, transparent); }
+.item-meta { min-width: 0; flex: 1; }
+.name { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 13px; font-weight: 600; }
+.time { margin-top: 5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--subtle); font-size: 11px; }
+.delete { position: absolute; right: 10px; top: 50%; width: 24px; height: 24px; display: grid; place-items: center; transform: translateY(-50%); border-radius: 7px; color: var(--subtle); cursor: pointer; font-size: 17px; transition: color .2s ease, background .2s ease; }
+.delete:hover { color: var(--danger); background: rgba(255,59,48,.1); }
 
+.main { min-width: 0; flex: 1; display: flex; flex-direction: column; padding: 16px 20px 20px; }
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.toolbar > div:first-child { min-width: 0; display: flex; align-items: baseline; gap: 12px; }
+.eyebrow { margin: 0; color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; }
+.page-title { margin: 0; font-size: 21px; line-height: 1.2; letter-spacing: -.03em; white-space: nowrap; }
+.page-description { margin: 0; padding-left: 12px; border-left: 1px solid var(--line); color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.sidebar.hide{
+.status-card { display: flex; align-items: center; gap: 11px; padding: 12px 15px; border: 1px solid var(--line); border-radius: 13px; background: var(--status-bg); color: var(--muted); font-size: 12px; box-shadow: var(--shadow); }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--subtle); }
+.status-dot.connected { background: var(--accent); box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 65%, transparent); }
 
-    width:0;
+.log-card { min-height: 0; flex: 1; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: var(--log-bg); box-shadow: var(--shadow); }
+.log-header { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 17px; border-bottom: 1px solid var(--line); background: var(--log-header-bg); }
+.traffic-lights { display: flex; gap: 6px; margin-right: 4px; }
+.traffic-lights span { width: 8px; height: 8px; border-radius: 50%; background: var(--subtle); }
+.traffic-lights span:nth-child(1) { background: #ff5f57; }
+.traffic-lights span:nth-child(2) { background: #febc2e; }
+.traffic-lights span:nth-child(3) { background: #28c840; }
+.log-label { color: var(--muted); font-family: "SFMono-Regular", Consolas, monospace; font-size: 11px; letter-spacing: .04em; }
+.log-tools { margin-left: auto; color: var(--subtle); font-size: 11px; }
 
-    padding:0;
+#log { min-height: 0; flex: 1; overflow: auto; padding: 24px; color: var(--log-fg); white-space: pre-wrap; word-break: break-word; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 13px; line-height: 1.75; tab-size: 2; }
+#log::-webkit-scrollbar, .sidebar::-webkit-scrollbar { width: 8px; }
+#log::-webkit-scrollbar-thumb, .sidebar::-webkit-scrollbar-thumb { border-radius: 99px; background: var(--scrollbar); }
+#log::-webkit-scrollbar-thumb:hover, .sidebar::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-hover); }
+.empty { height: 100%; min-height: 280px; display: grid; place-items: center; align-content: center; gap: 13px; color: var(--muted); text-align: center; }
+.empty-icon { width: 58px; height: 58px; display: grid; place-items: center; border: 1px solid var(--empty-border); border-radius: 18px; color: var(--accent); background: var(--empty-bg); }
+.empty strong { display: block; color: var(--text); font-size: 15px; }
+.empty span { display: block; margin-top: 5px; color: var(--subtle); font-size: 12px; }
 
-    overflow:hidden;
-
-    border-right:0;
-
+@media (max-width: 720px) {
+  .header { height: 68px; padding: 0 16px; }
+  .brand { min-width: 0; }
+  .brand-subtitle, .button-danger { display: none; }
+  .main { padding: 12px 14px 14px; }
+  .toolbar { align-items: stretch; gap: 10px; }
+  .toolbar > div:first-child { gap: 8px; }
+  .eyebrow { display: none; }
+  .page-title { font-size: 18px; }
+  .page-description { padding-left: 8px; font-size: 11px; }
+  .status-card { width: auto; padding: 9px 11px; }
+  .sidebar { position: absolute; z-index: 3; height: calc(100vh - 68px); box-shadow: 24px 0 60px rgba(0,0,0,.28); }
+  .sidebar.hide { width: 0; }
 }
-
-
-#toggleSidebar{
-
-    background:#374151;
-
-    margin-left:0;
-
-    width:38px;
-
-    padding:8px;
-
-}
-
-
-.sidebar-title{
-
-    color:#94a3b8;
-
-    font-size:13px;
-
-    margin-bottom:10px;
-
-}
-
-
-
-.history{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:8px;
-
-}
-
-
-
-.item{
-
-    padding:10px;
-
-    border-radius:8px;
-
-    background:#1e293b;
-
-    cursor:pointer;
-
-    position:relative;
-
-}
-
-
-
-.item:hover{
-
-    background:#334155;
-
-}
-
-
-
-.item.active{
-
-    border:1px solid #3b82f6;
-
-}
-
-
-
-.name{
-
-    overflow:hidden;
-
-    white-space:nowrap;
-
-    text-overflow:ellipsis;
-
-    padding-right:20px;
-
-}
-
-
-
-.time{
-
-    font-size:12px;
-
-    color:#94a3b8;
-
-    margin-top:5px;
-
-}
-
-
-
-.delete{
-
-    position:absolute;
-
-    right:8px;
-
-    top:8px;
-
-    color:#f87171;
-
-    cursor:pointer;
-
-}
-
-
-
-.main{
-
-    flex:1;
-
-    display:flex;
-
-    flex-direction:column;
-
-}
-
-
-
-.status{
-
-    height:42px;
-
-    padding:12px 15px;
-
-    border-bottom:1px solid #334155;
-
-    color:#94a3b8;
-
-    font-size:13px;
-
-}
-
-
-
-#log{
-
-    flex:1;
-
-    overflow:auto;
-
-    padding:20px;
-
-    white-space:pre-wrap;
-
-    word-break:break-all;
-
-    font-size:13px;
-
-    line-height:1.6;
-
-}
-
-
-
-.empty{
-
-    text-align:center;
-
-    margin-top:100px;
-
-    color:#64748b;
-
-}
-
-
 </style>
-
 </head>
-
-
 <body>
+<div class="app-shell">
+  <header class="header">
+    <button id="toggleSidebar" class="icon-button" aria-label="切换侧边栏" title="切换侧边栏">☰</button>
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">⌁</div>
+      <div class="brand-copy">
+        <div class="brand-title">Log Viewer</div>
+        <div class="brand-subtitle">Realtime workspace</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="open" class="button-primary"><span aria-hidden="true">＋</span> 打开日志</button>
+      <button id="clear" class="button-danger">清空历史</button>
+      <button id="themeBtn" class="icon-button" aria-label="切换颜色模式" title="切换颜色模式">🌗</button>
+    </div>
+  </header>
 
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-heading">
+        <div class="sidebar-title">最近打开</div>
+        <span id="historyCount" class="history-count">0</span>
+      </div>
+      <div id="history" class="history"></div>
+    </aside>
 
-<div class="header">
+    <main class="main">
+      <div class="toolbar">
+        <div>
+          <div class="eyebrow">Log workspace</div>
+          <h1 class="page-title">日志工作台</h1>
+          <p class="page-description">实时查看本地日志文件，内容变化后会自动同步。</p>
+        </div>
+        <div class="status-card"><span id="statusDot" class="status-dot"></span><span id="status">未打开文件</span></div>
+      </div>
 
-
-<button id="toggleSidebar">
-☰
-</button>
-
-
-
-
-
-<button id="open">
-打开日志
-</button>
-
-
-<button id="clear"
-class="danger">
-清空历史
-</button>
-
-
+      <section class="log-card">
+        <div class="log-header">
+          <div class="traffic-lights" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span id="logLabel" class="log-label">等待加载日志文件…</span>
+          <span class="log-tools">LIVE · AUTO REFRESH</span>
+        </div>
+        <div id="log">
+          <div class="empty">
+            <div class="empty-icon" aria-hidden="true">▤</div>
+            <div><strong>还没有打开日志</strong><span>点击右上角「打开日志」选择 .log 或 .txt 文件</span></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 </div>
-
-
-
-<div class="layout">
-
-
-<div class="sidebar">
-
-
-<div class="sidebar-title">
-最近打开
-</div>
-
-
-<div id="history"
-class="history">
-</div>
-
-
-</div>
-
-
-
-<div class="main">
-
-
-<div id="status"
-class="status">
-未打开文件
-</div>
-
-
-<div id="log">
-
-<div class="empty">
-请选择日志文件
-</div>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
 
 <script>
+const DB_NAME = "log_viewer_db";
+const STORE = "handles";
+const THEME_KEY = "log-viewer-theme";
+const lightQuery = window.matchMedia("(prefers-color-scheme: light)");
+let currentHandle = null;
+let currentId = null;
+let timer = null;
+let lastSize = 0;
 
+const themeBtn = document.getElementById("themeBtn");
 
-const DB_NAME="log_viewer_db";
+// 用户的显式选择；null 表示跟随系统
+function getThemeChoice() {
+  const saved = localStorage.getItem(THEME_KEY);
+  return saved === "light" || saved === "dark" ? saved : null;
+}
 
-const STORE="handles";
+function applyTheme(theme) {
+  document.documentElement.classList.toggle("light", theme === "light");
+}
 
+function renderThemeBtn(choice) {
+  if (choice === "light") {
+    themeBtn.innerText = "☀️";
+    themeBtn.title = "当前：浅色模式（点击切换到深色）";
+    themeBtn.setAttribute("aria-label", "当前浅色模式，点击切换到深色");
+  } else if (choice === "dark") {
+    themeBtn.innerText = "🌙";
+    themeBtn.title = "当前：深色模式（点击切换到跟随系统）";
+    themeBtn.setAttribute("aria-label", "当前深色模式，点击切换到跟随系统");
+  } else {
+    themeBtn.innerText = "🌗";
+    themeBtn.title = "当前：跟随系统（点击切换到浅色）";
+    themeBtn.setAttribute("aria-label", "当前跟随系统，点击切换到浅色");
+  }
+}
 
-let currentHandle=null;
+function syncTheme() {
+  const choice = getThemeChoice();
+  applyTheme(choice || (lightQuery.matches ? "light" : "dark"));
+  renderThemeBtn(choice);
+}
 
-let currentId=null;
+// 跟随系统 → 浅色 → 深色 → 跟随系统
+function toggleTheme() {
+  const choice = getThemeChoice();
+  const next = choice === null ? "light" : choice === "light" ? "dark" : null;
+  if (next === null) localStorage.removeItem(THEME_KEY);
+  else localStorage.setItem(THEME_KEY, next);
+  syncTheme();
+}
 
-let timer=null;
-
-let lastSize=0;
-
-
-
-/**********************
- IndexedDB
-**********************/
-
-
-function openDB(){
-
-
-return new Promise(resolve=>{
-
-
-let req=
-indexedDB.open(
-DB_NAME,
-1
-);
-
-
-
-req.onupgradeneeded=e=>{
-
-
-e.target.result
-.createObjectStore(
-STORE
-);
-
-
-};
-
-
-
-req.onsuccess=e=>{
-
-resolve(
-e.target.result
-);
-
-};
-
-
+themeBtn.onclick = toggleTheme;
+syncTheme();
+lightQuery.addEventListener("change", () => {
+  if (getThemeChoice() === null) syncTheme();
 });
 
-
+function openDB() {
+  return new Promise(resolve => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore(STORE);
+    req.onsuccess = e => resolve(e.target.result);
+  });
 }
 
-
-
-
-async function saveHandle(id,handle){
-
-
-let db=
-await openDB();
-
-
-let tx=
-db.transaction(
-STORE,
-"readwrite"
-);
-
-
-tx.objectStore(STORE)
-.put(
-handle,
-id
-);
-
-
+async function saveHandle(id, handle) {
+  const db = await openDB();
+  db.transaction(STORE, "readwrite").objectStore(STORE).put(handle, id);
 }
 
+async function getHandle(id) {
+  const db = await openDB();
+  return new Promise(resolve => {
+    const req = db.transaction(STORE).objectStore(STORE).get(id);
+    req.onsuccess = () => resolve(req.result);
+  });
+}
 
+async function removeHandle(id) {
+  const db = await openDB();
+  db.transaction(STORE, "readwrite").objectStore(STORE).delete(id);
+}
 
-async function getHandle(id){
+const sidebar = document.querySelector(".sidebar");
+const toggleBtn = document.getElementById("toggleSidebar");
+const statusEl = document.getElementById("status");
+const statusDot = document.getElementById("statusDot");
+const logLabel = document.getElementById("logLabel");
 
+function restoreSidebar() {
+  if (localStorage.getItem("sidebar_hide") === "true") sidebar.classList.add("hide");
+}
 
-let db=
-await openDB();
-
-
-return new Promise(resolve=>{
-
-
-let req=
-db.transaction(
-STORE
-)
-.objectStore(STORE)
-.get(id);
-
-
-
-req.onsuccess=()=>{
-
-resolve(req.result);
-
+toggleBtn.onclick = () => {
+  sidebar.classList.toggle("hide");
+  localStorage.setItem("sidebar_hide", sidebar.classList.contains("hide"));
 };
-
-
-
-});
-
-
-}
-
-
-
-
-async function removeHandle(id){
-
-
-let db=
-await openDB();
-
-
-db.transaction(
-STORE,
-"readwrite"
-)
-.objectStore(STORE)
-.delete(id);
-
-
-}
-
-
-
-
-/**********************
- 历史记录
-**********************/
-
-const sidebar =
-document.querySelector(".sidebar");
-
-
-const toggleBtn =
-document.getElementById(
-"toggleSidebar"
-);
-
-
-
-function restoreSidebar(){
-
-
-let hide =
-localStorage.getItem(
-"sidebar_hide"
-);
-
-
-
-if(hide==="true"){
-
-sidebar.classList.add(
-"hide"
-);
-
-}
-
-
-}
-
-
-
-toggleBtn.onclick=()=>{
-
-
-sidebar.classList.toggle(
-"hide"
-);
-
-
-localStorage.setItem(
-"sidebar_hide",
-
-sidebar.classList.contains(
-"hide"
-)
-
-);
-
-
-};
-
-
-
 restoreSidebar();
 
-function getHistory(){
-
-
-return JSON.parse(
-localStorage.getItem(
-"log_history"
-)
-||"[]"
-);
-
-
+function getHistory() {
+  return JSON.parse(localStorage.getItem("log_history") || "[]");
 }
 
-
-
-function saveHistory(id,handle){
-
-
-let list=
-getHistory();
-
-
-list=
-list.filter(
-x=>x.id!==id
-);
-
-
-
-list.unshift({
-
-id:id,
-
-name:handle.name,
-
-time:
-new Date()
-.toLocaleString()
-
-});
-
-
-
-list=list.slice(0,30);
-
-
-
-localStorage.setItem(
-"log_history",
-JSON.stringify(list)
-);
-
-
-
-renderHistory();
-
-
+function saveHistory(id, handle) {
+  let list = getHistory().filter(x => x.id !== id);
+  list.unshift({ id, name: handle.name, time: new Date().toLocaleString() });
+  localStorage.setItem("log_history", JSON.stringify(list.slice(0, 30)));
+  renderHistory();
 }
 
-
-
-function deleteHistory(id){
-
-
-let list=
-getHistory()
-.filter(
-x=>x.id!==id
-);
-
-
-
-localStorage.setItem(
-"log_history",
-JSON.stringify(list)
-);
-
-
-
-removeHandle(id);
-
-
-renderHistory();
-
-
+function deleteHistory(id) {
+  localStorage.setItem("log_history", JSON.stringify(getHistory().filter(x => x.id !== id)));
+  removeHandle(id);
+  if (currentId === id) {
+    currentId = null;
+    currentHandle = null;
+    statusEl.textContent = "未打开文件";
+    statusDot.classList.remove("connected");
+    logLabel.textContent = "等待加载日志文件…";
+    document.getElementById("log").innerHTML = '<div class="empty"><div class="empty-icon" aria-hidden="true">▤</div><div><strong>还没有打开日志</strong><span>点击右上角「打开日志」选择 .log 或 .txt 文件</span></div></div>';
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+    localStorage.removeItem("current_file");
+  }
+  renderHistory();
 }
 
-
-
-
-function renderHistory(){
-
-
-let box=
-document.getElementById(
-"history"
-);
-
-
-
-box.innerHTML="";
-
-
-
-getHistory()
-.forEach(item=>{
-
-
-let div=
-document.createElement(
-"div"
-);
-
-
-
-div.className=
-"item";
-
-
-
-if(item.id===currentId){
-
-div.classList.add(
-"active"
-);
-
+function renderHistory() {
+  const box = document.getElementById("history");
+  const list = getHistory();
+  document.getElementById("historyCount").textContent = list.length;
+  box.innerHTML = "";
+  list.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "item" + (item.id === currentId ? " active" : "");
+    div.tabIndex = 0;
+    div.innerHTML = `<div class="item-meta"><div class="name"></div><div class="time"></div></div><div class="delete" title="删除记录" aria-label="删除记录">×</div>`;
+    div.querySelector(".name").textContent = item.name;
+    div.querySelector(".time").textContent = item.time;
+    div.onclick = () => openHistory(item.id);
+    div.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openHistory(item.id); } };
+    div.querySelector(".delete").onclick = e => { e.stopPropagation(); deleteHistory(item.id); };
+    box.appendChild(div);
+  });
 }
 
+async function openHistory(id) {
+  const handle = await getHandle(id);
+  if (!handle) { alert("文件句柄不存在，请重新选择"); return; }
+  let permission = await handle.queryPermission({ mode: "read" });
+  if (permission !== "granted") permission = await handle.requestPermission({ mode: "read" });
+  if (permission === "granted") {
+    currentHandle = handle;
+    currentId = id;
+    await readFile();
+    watch();
+    renderHistory();
+    localStorage.setItem("current_file", id);
+  }
+}
 
+async function readFile() {
+  if (!currentHandle) return;
+  const file = await currentHandle.getFile();
+  document.getElementById("log").textContent = await file.text();
+  const sizeText = formatSize(file.size);
+  statusEl.textContent = `${file.name}  ·  ${sizeText}`;
+  logLabel.textContent = file.name;
+  statusDot.classList.add("connected");
+  lastSize = file.size;
+  scrollBottom();
+}
 
-div.innerHTML=`
+function formatSize(size) {
+  if (size > 1024 * 1024) return (size / 1024 / 1024).toFixed(2) + " MB";
+  if (size > 1024) return (size / 1024).toFixed(2) + " KB";
+  return size + " B";
+}
 
-<div class="name">
-${item.name}
-</div>
+function scrollBottom() {
+  const el = document.getElementById("log");
+  el.scrollTop = el.scrollHeight;
+}
 
-<div class="time">
-${item.time}
-</div>
+function watch() {
+  if (timer) clearInterval(timer);
+  timer = setInterval(async () => {
+    try {
+      const file = await currentHandle.getFile();
+      if (file.size !== lastSize) await readFile();
+    } catch (e) { console.log(e); }
+  }, 1000);
+}
 
-<div class="delete">
-×
-</div>
-
-`;
-
-
-
-div.onclick=
-()=>openHistory(item.id);
-
-
-
-div.querySelector(".delete")
-.onclick=e=>{
-
-e.stopPropagation();
-
-deleteHistory(item.id);
-
+document.getElementById("open").onclick = async () => {
+  try {
+    const [handle] = await showOpenFilePicker({
+      types: [{ description: "Log", accept: { "text/plain": [".log", ".txt"] } }]
+    });
+    const id = crypto.randomUUID();
+    await saveHandle(id, handle);
+    saveHistory(id, handle);
+    currentHandle = handle;
+    currentId = id;
+    await readFile();
+    watch();
+    localStorage.setItem("current_file", id);
+    renderHistory();
+  } catch (e) {
+    if (e?.name !== "AbortError") console.log(e);
+  }
 };
 
-
-
-box.appendChild(div);
-
-
-
-});
-
-
-
-}
-
-
-
-
-/**********************
- 文件处理
-**********************/
-
-
-
-async function openHistory(id){
-
-
-let handle=
-await getHandle(id);
-
-
-
-if(!handle){
-
-alert(
-"文件句柄不存在，请重新选择"
-);
-
-return;
-
-}
-
-
-
-let permission=
-await handle.queryPermission({
-mode:"read"
-});
-
-
-
-if(permission!=="granted"){
-
-permission=
-await handle.requestPermission({
-mode:"read"
-});
-
-
-}
-
-
-
-if(permission==="granted"){
-
-
-currentHandle=
-handle;
-
-
-currentId=
-id;
-
-
-await readFile();
-
-
-watch();
-
-
-renderHistory();
-
-
-}
-
-
-}
-
-
-
-
-async function readFile(){
-
-
-if(!currentHandle)
-return;
-
-
-
-let file=
-await currentHandle.getFile();
-
-
-
-let text=
-await file.text();
-
-
-
-document
-.getElementById("log")
-.textContent=
-text;
-
-
-
-document
-.getElementById("status")
-.textContent=
-`${file.name}  |  ${formatSize(file.size)}`;
-
-
-
-lastSize=file.size;
-
-
-scrollBottom();
-
-
-}
-
-
-
-
-function formatSize(size){
-
-
-if(size>1024*1024)
-
-return(
-(size/1024/1024)
-.toFixed(2)
-+" MB"
-);
-
-
-return(
-(size/1024)
-.toFixed(2)
-+" KB"
-);
-
-
-}
-
-
-
-
-function scrollBottom(){
-
-
-let el=
-document.getElementById(
-"log"
-);
-
-
-el.scrollTop=
-el.scrollHeight;
-
-
-}
-
-
-
-function watch(){
-
-
-if(timer)
-clearInterval(timer);
-
-
-
-timer=
-setInterval(async()=>{
-
-
-try{
-
-
-let file=
-await currentHandle.getFile();
-
-
-
-if(file.size!==lastSize){
-
-await readFile();
-
-}
-
-
-
-}catch(e){
-
-
-console.log(e);
-
-
-}
-
-
-
-},1000);
-
-
-}
-
-
-
-
-
-/**********************
- 打开按钮
-**********************/
-
-
-
-document
-.getElementById("open")
-.onclick=
-async()=>{
-
-
-try{
-
-
-let [
-handle
-]=
-await showOpenFilePicker({
-
-types:[{
-
-description:"Log",
-
-accept:{
-
-"text/plain":[
-".log",
-".txt"
-]
-
-}
-
-}]
-
-
-});
-
-
-
-let id=
-crypto.randomUUID();
-
-
-
-await saveHandle(
-id,
-handle
-);
-
-
-
-saveHistory(
-id,
-handle
-);
-
-
-
-currentHandle=
-handle;
-
-
-currentId=
-id;
-
-
-
-await readFile();
-
-
-watch();
-
-
-
-}
-catch(e){
-
-console.log(e);
-
-}
-
-
+document.getElementById("clear").onclick = () => {
+  if (!getHistory().length || confirm("确定要清空所有历史记录吗？")) {
+    localStorage.removeItem("log_history");
+    renderHistory();
+  }
 };
 
-
-
-
-document
-.getElementById("clear")
-.onclick=
-()=>{
-
-
-localStorage.removeItem(
-"log_history"
-);
-
-
-renderHistory();
-
-
-};
-
-
-
-
-
-
-/**********************
- 初始化恢复
-**********************/
-
-
-
-(async()=>{
-
-
-renderHistory();
-
-
-
-let last=
-localStorage.getItem(
-"current_file"
-);
-
-
-
-if(last){
-
-
-await openHistory(last);
-
-
-}
-
-
+(async () => {
+  renderHistory();
+  const last = localStorage.getItem("current_file");
+  if (last) await openHistory(last);
 })();
-
-
-
-
 </script>
-
 </body>
-
 </html>

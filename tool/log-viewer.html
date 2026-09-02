@@ -108,13 +108,6 @@ button:focus-visible, .item:focus-visible {
 
 .brand { display: flex; align-items: center; gap: 12px; margin-right: auto; min-width: 210px; }
 
-.brand-mark {
-  width: 38px; height: 38px; display: grid; place-items: center;
-  border: 1px solid var(--brand-border); border-radius: 12px;
-  color: var(--accent); background: var(--brand-bg);
-  box-shadow: var(--brand-shadow);
-}
-
 .brand-copy { display: flex; flex-direction: column; gap: 2px; }
 .brand-title { font-size: 15px; font-weight: 700; letter-spacing: .02em; }
 .brand-subtitle { color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
@@ -233,7 +226,6 @@ button:active { transform: translateY(0); }
   <header class="header">
     <button id="toggleSidebar" class="icon-button" aria-label="切换侧边栏" title="切换侧边栏">☰</button>
     <div class="brand">
-      <div class="brand-mark" aria-hidden="true">⌁</div>
       <div class="brand-copy">
         <div class="brand-title">Log Viewer</div>
         <div class="brand-subtitle">Realtime workspace</div>
